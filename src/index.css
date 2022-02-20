@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #5357B6;
+}
+
+button {
+    border: none;
+}
+
+body,
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+.m-attribution {
+    font-size: 11px;
+    text-align: center;
+    color: hsl(228, 45%, 44%);
+}
+
+.m-likability-button {
+    background-color: hsl(228, 33%, 97%);
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 100%;
+    border-radius: 5px;
+}
+
+.m-likability-button__like {
+    background-color: inherit;
+}
+
+.m-likability-button__value {
+    background-color: inherit;
+    color: inherit;
+}
+
+.m-likability-button__dislike {
+    background-color: inherit;
+    display: flex;
+}
