@@ -15,7 +15,7 @@ const CommentStates = {
 
 function TextAreaReply(props) {
     return (
-        <textarea value={props.text}></textarea>
+        <textarea className="comment-response" value={props.value}></textarea>
     );
 }
 
@@ -47,16 +47,13 @@ function CommentDetails(props) {
     )
 }
 
-class ProfileImage extends React.Component {
-    getImage(name) {
-        return Avatars[name];
-    }
+function ProfileImage(props) {
+    const image = Avatars[props.imageName];
+    const classNames = `profile-image ${props.className}`;
 
-    render() {
-        return (
-            <img className="" src={this.getImage(this.props.imageName)} alt="profile"></img>
-        );
-    }
+    return (
+        <img className={classNames} src={image} alt="profile"></img>
+    );
 }
 
 
@@ -110,8 +107,8 @@ class CreateComment extends React.Component {
             <CommentCard>
                 <TextAreaReply value={this.defaultText}></TextAreaReply>
                 <div className="l-create-comment">
-                    <ProfileImage imageName={this.userImageName}></ProfileImage>
-                    <PostButton></PostButton>
+                    <ProfileImage className="l-create-comment__image" imageName={this.userImageName}></ProfileImage>
+                    <PostButton type={ButtonPostType.SEND}></PostButton>
                 </div>
             </CommentCard>
         );
@@ -120,7 +117,7 @@ class CreateComment extends React.Component {
 
 function CommentCard(props) {
     return (
-        <div className="m-comment">
+        <div className="m-comment l-comment">
             {props.children}
         </div>
     );
@@ -141,6 +138,7 @@ class App extends React.Component {
             <React.StrictMode>
                 <main class="container">
                     <CommentThread></CommentThread>
+
                     <CreateComment currentUser={Data.currentUser} />
                     
                 </main>

@@ -27,12 +27,26 @@ body {
 .container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     border: 3px solid red;
 
     min-height: calc(100vh - 23px);
 }
 
+/* PROFILE IMAGE */
+
+.profile-image {
+    width: 2rem;
+}
+
+@media screen and (min-width: 1440px) {
+    .profile-image {
+        width: 3rem;
+    }
+}
+
+/* LIKABILITY BUTTON */
 
 .m-likability-button {
     background-color: hsl(228, 33%, 97%);
@@ -59,14 +73,42 @@ body {
     display: flex;
 }
 
+/* COMMENT */
+
 .m-comment {
     background-color: #fff;
-    border-radius: 4px;
-    width: 80%;
+    border-radius: 8px;
+    padding: .75rem 0;
+    width: 90%;
     max-width: 600px;
 }
 
+.l-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+}
+
+/* COMMENT TEXTAREA */
+
+textarea.comment-response {
+    border: solid hsla(224, 19%, 93%, 1) 1px;
+    border-radius: 8px;
+    padding: .5rem 1rem;
+    resize: none;
+    width: inherit;
+    aspect-ratio: 3 / 1;
+}
+
+/* CREATE COMMENT */
+
 .l-create-comment {
+    width: inherit;
     display: flex;
     justify-content: space-between;
+}
+
+.l-create-comment__image {
+    align-self: flex-end;
 }
