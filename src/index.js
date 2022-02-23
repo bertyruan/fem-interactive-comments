@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Icons, Avatars } from './static-images';
-import { PostButton, ButtonPostType } from './components/buttons/buttons';
+import { ActionableButton, PostButton, ButtonPostType } from './components/buttons/buttons';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
@@ -30,18 +30,17 @@ function LikabilityButton(props) {
     return (
         <div className="m-likability-button">
             <button className="m-likability-button__like" onClick={handleLike} ><img src={Icons.plus} alt="like"></img></button>
-            <button className="m-likability-button__value">{props.likes}</button>
+            <button className="m-likability-button__value">{props.score}</button>
             <button className="m-likability-button__dislike" onClick={handleDislike}><img src={Icons.minus} alt="dislike"></img></button>
         </div>
     );
 } 
 
 function CommentDetails(props) {
-    console.log(props.profile.imageName);
     return (
         <div className="m-comment-info">
-            <ProfileImage image={Avatars.amyrobson}></ProfileImage>
-            <div className="m-comment-info__username">{props.profile.username}</div>
+            <ProfileImage imageName={props.username}></ProfileImage>
+            <div className="m-comment-info__username">{props.username}</div>
             <div className="m-comment-info__timeSpan">{props.timeSpan}</div>
         </div>
     )
@@ -54,45 +53,6 @@ function ProfileImage(props) {
     return (
         <img className={classNames} src={image} alt="profile"></img>
     );
-}
-
-
-
-class Comment extends React.Component {
-
-    componentDidMount() {
-
-    }
-    componentWillUnmount() {}
-
-    getActionableButtons(type) {
-        if(type === CommentStates.CREATE) {
-            return;
-        }
-    }
-
-    getPostButton(type) {
-        if(type === CommentStates.CREATE) {
-            return (
-                <PostButton type={ButtonPostType.SEND}></PostButton>
-            );
-        }
-    }
-
-    render() {
-        
-
-        const profile = {imageName: 'image-amyrobson.png', username: 'amyrobson'};
-        const timeSpan = "1 month ago";
-        return (
-            <div>
-                <CommentDetails profile={profile} timeSpan={timeSpan} />
-                <PostButton type={ButtonPostType.REPLY}></PostButton>
-                <LikabilityButton likes={10} />
-
-            </div>
-        );
-    }
 }
 
 class CreateComment extends React.Component {
@@ -124,23 +84,63 @@ function CommentCard(props) {
 }
 
 class CommentThread extends React.Component {
+    comments = this.props.comments;
     render() {
         return (
-            <div></div>
+            <Comment comment={this.comments[0]}></Comment>
+        );
+    }
+}
+
+class Comment extends React.Component {
+
+    
+
+    getActionableButtons(type) {
+        if(type === CommentStates.CREATE) {
+            return;
+        }
+    }
+
+    getPostButton(type) {
+        if(type === CommentStates.CREATE) {
+            return (
+                <PostButton type={ButtonPostType.SEND}></PostButton>
+            );
+        }
+    }
+
+    comment = this.props.comment;
+
+    render() {
+        return (
+            <CommentCard>
+                <CommentDetails username={this.comment.user.username} timeSpan={this.comment.createdAt} />
+                <div>{ this.comment.content }</div>
+                <ActionableButton type={ButtonPostType.REPLY} />
+                <LikabilityButton score={this.comment.score} />
+
+            </CommentCard>
         );
     }
 }
 
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.data = Data;
+    }
+
+    componentDidMount() {}
+    componentWillUnmount() {}
+
     render() {
         return (
             <React.StrictMode>
                 <main class="container">
-                    <CommentThread></CommentThread>
-
-                    <CreateComment currentUser={Data.currentUser} />
-                    
+                    <CommentThread comments={this.data.comments}></CommentThread>
+                    <CreateComment currentUser={this.data.currentUser} />
                 </main>
                 <footer>
                     <Attribution />
