@@ -1,10 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Icons, Avatars } from './static-images'
+import { Icons, Avatars } from './static-images';
+import { PostButton, ButtonPostType } from './components/buttons';
 import './index.css';
 
 
-let getAvatarImagePath = require.context('./assets/images/avatars/', true);
+const CommentStates = {
+    DEFAULT: 'default',
+    EDIT: 'edit',
+    REPLY: 'reply',
+    CREATE: 'create'
+}
+
+function TextAreaReply(props) {
+    return (
+        <textarea value={props.text}></textarea>
+    );
+}
 
 function LikabilityButton(props) {
     const handleLike = () => {
@@ -62,6 +74,7 @@ class Comment extends React.Component {
         return (
             <div>
                 <CommentDetails profile={profile} timeSpan={timeSpan} />
+                <PostButton type={ButtonPostType.REPLY}></PostButton>
                 <LikabilityButton likes={10} />
             </div>
         );
@@ -74,6 +87,7 @@ class App extends React.Component {
         return (
             <React.StrictMode>
                 <main>
+                    <TextAreaReply text="hello world!" />
                     <Comment />
                     <Attribution />
                 </main>
