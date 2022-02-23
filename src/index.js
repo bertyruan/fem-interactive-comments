@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Icons, Avatars } from './static-images';
-import { PostButton, ButtonPostType } from './components/buttons';
+import { PostButton, ButtonPostType } from './components/buttons/buttons';
 import './index.css';
-
+import Data from './assets/data/data.json'; 
+import { Attribution } from './components/attribution/attribution';
 
 const CommentStates = {
     DEFAULT: 'default',
@@ -21,6 +22,7 @@ function TextAreaReply(props) {
 function LikabilityButton(props) {
     const handleLike = () => {
         console.log('like');
+        console.log(Data.currentUser);
     }
     const handleDislike = () => {
         console.log('dislike');
@@ -45,21 +47,19 @@ function CommentDetails(props) {
     )
 }
 
-function ProfileImage(props) {
-    return (
-        <img className="" src={props.image} alt="profile"></img>
-    );
+class ProfileImage extends React.Component {
+    getImage(name) {
+        return Avatars[name];
+    }
+
+    render() {
+        return (
+            <img className="" src={this.getImage(this.props.imageName)} alt="profile"></img>
+        );
+    }
 }
 
 
-function Attribution(props) {
-    return (
-        <div className="m-attribution">
-            Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-            Coded by <a href="www.github.com/bertyruan">Berty Ruan</a>.
-        </div>
-    );
-}
 
 class Comment extends React.Component {
 
@@ -68,7 +68,23 @@ class Comment extends React.Component {
     }
     componentWillUnmount() {}
 
+    getActionableButtons(type) {
+        if(type === CommentStates.CREATE) {
+            return;
+        }
+    }
+
+    getPostButton(type) {
+        if(type === CommentStates.CREATE) {
+            return (
+                <PostButton type={ButtonPostType.SEND}></PostButton>
+            );
+        }
+    }
+
     render() {
+        
+
         const profile = {imageName: 'image-amyrobson.png', username: 'amyrobson'};
         const timeSpan = "1 month ago";
         return (
@@ -76,7 +92,44 @@ class Comment extends React.Component {
                 <CommentDetails profile={profile} timeSpan={timeSpan} />
                 <PostButton type={ButtonPostType.REPLY}></PostButton>
                 <LikabilityButton likes={10} />
+
             </div>
+        );
+    }
+}
+
+class CreateComment extends React.Component {
+    constructor(props) {
+        super(props);
+        this.userImageName = this.props.currentUser.username;
+    }
+
+    defaultText = "Add a comment...";
+    render() {
+        return (
+            <CommentCard>
+                <TextAreaReply value={this.defaultText}></TextAreaReply>
+                <div className="l-create-comment">
+                    <ProfileImage imageName={this.userImageName}></ProfileImage>
+                    <PostButton></PostButton>
+                </div>
+            </CommentCard>
+        );
+    }
+}
+
+function CommentCard(props) {
+    return (
+        <div className="m-comment">
+            {props.children}
+        </div>
+    );
+}
+
+class CommentThread extends React.Component {
+    render() {
+        return (
+            <div></div>
         );
     }
 }
@@ -86,11 +139,14 @@ class App extends React.Component {
     render() {
         return (
             <React.StrictMode>
-                <main>
-                    <TextAreaReply text="hello world!" />
-                    <Comment />
-                    <Attribution />
+                <main class="container">
+                    <CommentThread></CommentThread>
+                    <CreateComment currentUser={Data.currentUser} />
+                    
                 </main>
+                <footer>
+                    <Attribution />
+                </footer>
             </React.StrictMode>
         );
     }

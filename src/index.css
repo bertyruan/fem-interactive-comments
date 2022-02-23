@@ -3,7 +3,8 @@
 }
 
 :root {
-    --primary-color: #5357B6;
+    --primary-color: hsla(238,40%,52%, 1);
+    --bg-color: hsla(228, 33%, 97%, 1);
 }
 
 button {
@@ -18,11 +19,20 @@ p {
     margin: 0;
 }
 
-.m-attribution {
-    font-size: 11px;
-    text-align: center;
-    color: hsl(228, 45%, 44%);
+body {
+    background-color: var(--bg-color);
+    
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid red;
+
+    min-height: calc(100vh - 23px);
+}
+
 
 .m-likability-button {
     background-color: hsl(228, 33%, 97%);
@@ -47,4 +57,16 @@ p {
 .m-likability-button__dislike {
     background-color: inherit;
     display: flex;
+}
+
+.m-comment {
+    background-color: #fff;
+    border-radius: 4px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.l-create-comment {
+    display: flex;
+    justify-content: space-between;
 }

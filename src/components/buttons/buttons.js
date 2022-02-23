@@ -24,8 +24,8 @@ function PostButton(props) {
 function ActionableButton(props) {
     return (
         <Button>
-            <img src={props.button.icon}></img>
-            <span>{props.button.type}</span>
+            <img src={props.icon}></img>
+            <span>{props.type}</span>
         </Button>
     );
 }
