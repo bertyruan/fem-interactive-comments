@@ -1,29 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Icons, Avatars } from './static-images'
 import './index.css';
 
-import IconPlus from './assets/images/icon-plus.svg';
-import IconMinus from './assets/images/icon-minus.svg';
-import IconDelete from './assets/images/icon-delete.svg';
-import IconEdit from './assets/images/icon-edit.svg';
-import IconReply from './assets/images/icon-reply.svg';
+
+let getAvatarImagePath = require.context('./assets/images/avatars/', true);
 
 function LikabilityButton(props) {
+    const handleLike = () => {
+        console.log('like');
+    }
+    const handleDislike = () => {
+        console.log('dislike');
+    }
     return (
         <div className="m-likability-button">
-            <button className="m-likability-button__like"><img src={IconPlus} alt="like"></img></button>
+            <button className="m-likability-button__like" onClick={handleLike} ><img src={Icons.plus} alt="like"></img></button>
             <button className="m-likability-button__value">{props.likes}</button>
-            <button className="m-likability-button__dislike"><img src={IconMinus} alt="dislike"></img></button>
+            <button className="m-likability-button__dislike" onClick={handleDislike}><img src={Icons.minus} alt="dislike"></img></button>
         </div>
     );
 } 
 
-function CommentInfo(props) {
+function CommentDetails(props) {
+    console.log(props.profile.imageName);
     return (
-        <div>
-            
+        <div className="m-comment-info">
+            <ProfileImage image={Avatars.amyrobson}></ProfileImage>
+            <div className="m-comment-info__username">{props.profile.username}</div>
+            <div className="m-comment-info__timeSpan">{props.timeSpan}</div>
         </div>
     )
+}
+
+function ProfileImage(props) {
+    return (
+        <img className="" src={props.image} alt="profile"></img>
+    );
 }
 
 
@@ -38,9 +51,17 @@ function Attribution(props) {
 
 class Comment extends React.Component {
 
+    componentDidMount() {
+
+    }
+    componentWillUnmount() {}
+
     render() {
+        const profile = {imageName: 'image-amyrobson.png', username: 'amyrobson'};
+        const timeSpan = "1 month ago";
         return (
             <div>
+                <CommentDetails profile={profile} timeSpan={timeSpan} />
                 <LikabilityButton likes={10} />
             </div>
         );
@@ -48,19 +69,21 @@ class Comment extends React.Component {
 }
 
 
-class InteractiveCommentsPage extends React.Component {
+class App extends React.Component {
     render() {
         return (
-            <main>
-                <Comment />
-                <Attribution />
-            </main>
+            <React.StrictMode>
+                <main>
+                    <Comment />
+                    <Attribution />
+                </main>
+            </React.StrictMode>
         );
     }
 }
 
 
 ReactDOM.render(
-    <InteractiveCommentsPage />,
+    <App />,
     document.getElementById('root')
 );
