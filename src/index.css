@@ -1,14 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700");
+
 * {
     box-sizing: border-box;
 }
 
 :root {
-    --primary-color: hsla(238,40%,52%, 1);
+    --primary-color: hsla(238, 40%, 52%, 1);
+    --warn-color: hsla(358, 79%, 66%, 1);
     --bg-color: hsla(228, 33%, 97%, 1);
+    --font-color: hsla(211, 10%, 45%, 1);
+    --bold-font: hsla(212, 24%, 26%, 1);
 }
 
 button {
     border: none;
+    font: inherit;
 }
 
 body,
@@ -20,8 +26,16 @@ p {
 }
 
 body {
+    font-family: 'Rubik', sans-serif;
+    color: var(--font-color);
     background-color: var(--bg-color);
-    
+}
+
+/* HELPER CLASSES */
+
+.comment-text {
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
 .container {
@@ -29,8 +43,9 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    border: 3px solid red;
+    padding-top: 1rem;
 
+    /* calc is from the footer height */
     min-height: calc(100vh - 23px);
 }
 
@@ -54,9 +69,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: .25em;
     
-    width: 100%;
-    border-radius: 5px;
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
 }
 
 .m-likability-button__like {
@@ -65,7 +82,8 @@ body {
 
 .m-likability-button__value {
     background-color: inherit;
-    color: inherit;
+    color: var(--primary-color);
+    font-weight: 500;
 }
 
 .m-likability-button__dislike {
@@ -78,7 +96,7 @@ body {
 .m-comment {
     background-color: #fff;
     border-radius: 8px;
-    padding: .75rem 0;
+    padding: 1rem 1rem;
     width: 90%;
     max-width: 600px;
 }
@@ -88,6 +106,19 @@ body {
     flex-direction: column;
     align-items: center;
     gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.m-comment--actionables {
+    width: 100%;
+    margin-top: .75rem;
+}
+
+.l-comment--actionables {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
 }
 
 /* COMMENT TEXTAREA */
@@ -97,14 +128,41 @@ textarea.comment-response {
     border-radius: 8px;
     padding: .5rem 1rem;
     resize: none;
-    width: inherit;
+    width: 100%;
     aspect-ratio: 3 / 1;
+    font: inherit;
+    color: inherit;
+}
+
+/* COMMENT DETAILS */
+
+.l-comment-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.m-comment-details__username {
+    font-weight: 500;
+    color: var(--bold-font);
+}
+
+.m-comment-details__you {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 500;
+    font-size: .81rem;
+    line-height: .96rem;
+    border-radius: 2px;
+    padding: .25em .5em;
+    margin-left: .5em;
 }
 
 /* CREATE COMMENT */
 
 .l-create-comment {
-    width: inherit;
+    width: 100%;
     display: flex;
     justify-content: space-between;
 }

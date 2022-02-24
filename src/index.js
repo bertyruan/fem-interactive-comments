@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Icons, Avatars } from './static-images';
-import { ActionableButton, PostButton, ButtonPostType } from './components/buttons/buttons';
+import { ButtonActionableType, ActionableButton, PostButton, ButtonPostType } from './components/buttons/buttons';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
@@ -15,7 +15,16 @@ const CommentStates = {
 
 function TextAreaReply(props) {
     return (
-        <textarea className="comment-response" value={props.value}></textarea>
+        <textarea className="comment-response comment-text" value={props.value}></textarea>
+    );
+}
+
+function ProfileImage(props) {
+    const image = Avatars[props.imageName];
+    const classNames = `profile-image ${props.className}`;
+
+    return (
+        <img className={classNames} src={image} alt="profile"></img>
     );
 }
 
@@ -38,20 +47,23 @@ function LikabilityButton(props) {
 
 function CommentDetails(props) {
     return (
-        <div className="m-comment-info">
+        <div className="l-comment-details">
             <ProfileImage imageName={props.username}></ProfileImage>
-            <div className="m-comment-info__username">{props.username}</div>
-            <div className="m-comment-info__timeSpan">{props.timeSpan}</div>
+            <div className="m-comment-details__username">
+                {props.username}
+                {props.isCurrUsers && <span className="m-comment-details__you">you</span>}
+            </div>
+            
+            <div className="m-comment-details__timeSpan">{props.timeSpan}</div>
         </div>
     )
 }
 
-function ProfileImage(props) {
-    const image = Avatars[props.imageName];
-    const classNames = `profile-image ${props.className}`;
-
+function CommentCard(props) {
     return (
-        <img className={classNames} src={image} alt="profile"></img>
+        <div className="m-comment l-comment">
+            {props.children}
+        </div>
     );
 }
 
@@ -75,31 +87,25 @@ class CreateComment extends React.Component {
     }
 }
 
-function CommentCard(props) {
-    return (
-        <div className="m-comment l-comment">
-            {props.children}
-        </div>
-    );
-}
-
-class CommentThread extends React.Component {
-    comments = this.props.comments;
-    render() {
-        return (
-            <Comment comment={this.comments[0]}></Comment>
-        );
-    }
-}
-
 class Comment extends React.Component {
-
+    constructor(props) {
+        super(props);
+        this.comment = this.props.comment;
+        this.isCurrUsers = this.props.isUsers;   
+    }
     
-
-    getActionableButtons(type) {
-        if(type === CommentStates.CREATE) {
-            return;
+    getActionableButtons(isCurrUsers) {
+        if(isCurrUsers) {
+            const del = ButtonActionableType.DELETE;
+            const edit = ButtonActionableType.EDIT;
+            return (
+                <div className="l-comment--actionables">
+                    <ActionableButton type={del} />
+                    <ActionableButton type={edit} />
+                </div>
+            );
         }
+        return <ActionableButton type={ButtonActionableType.REPLY} />;
     }
 
     getPostButton(type) {
@@ -110,21 +116,37 @@ class Comment extends React.Component {
         }
     }
 
-    comment = this.props.comment;
-
     render() {
         return (
             <CommentCard>
-                <CommentDetails username={this.comment.user.username} timeSpan={this.comment.createdAt} />
-                <div>{ this.comment.content }</div>
-                <ActionableButton type={ButtonPostType.REPLY} />
-                <LikabilityButton score={this.comment.score} />
-
+                <CommentDetails 
+                    username={this.comment.user.username} 
+                    isCurrUsers={this.isCurrUsers} 
+                    timeSpan={this.comment.createdAt} 
+                />
+                <div className="comment-text">{ this.comment.content }</div>
+                <div className="m-comment--actionables l-comment--actionables">
+                    <LikabilityButton score={this.comment.score} />
+                    {this.getActionableButtons(this.isCurrUsers)}
+                </div>
             </CommentCard>
         );
     }
 }
 
+class CommentThread extends React.Component {
+    comments = this.props.comments;
+    currentUser = this.props.currentUser;
+
+    currComment = this.comments[0];
+    currCommentIsUsers = this.currComment.user.username === this.currentUser.username;
+
+    render() {
+        return (
+            <Comment isUsers={this.currCommentIsUsers} comment={this.comments[0]}></Comment>
+        );
+    }
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -138,8 +160,10 @@ class App extends React.Component {
     render() {
         return (
             <React.StrictMode>
-                <main class="container">
-                    <CommentThread comments={this.data.comments}></CommentThread>
+                <main className="container">
+                    <CommentThread 
+                        currentUser={this.data.currentUser} 
+                        comments={this.data.comments} />
                     <CreateComment currentUser={this.data.currentUser} />
                 </main>
                 <footer>

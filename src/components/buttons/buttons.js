@@ -1,8 +1,15 @@
 import './buttons.css';
+import {Icons} from '../../static-images';
 
 const ButtonPostType = {
     SEND: 'send',
     UPDATE: 'update',
+    REPLY: 'reply'
+}
+
+const ButtonActionableType = {
+    DELETE: 'delete',
+    EDIT: 'edit',
     REPLY: 'reply'
 }
 
@@ -22,12 +29,14 @@ function PostButton(props) {
 }
 
 function ActionableButton(props) {
+    const icon = Icons[props.type];
+    const deleteCSS = props.type === ButtonActionableType.DELETE && 'button--actionable-delete';
     return (
-        <Button>
-            <img src={props.icon}></img>
-            <span>{props.type}</span>
+        <Button className='button--actionable'>
+            <img src={icon} />
+            <span className={deleteCSS}>{props.type}</span>
         </Button>
     );
 }
 
-export { ButtonPostType, PostButton, ActionableButton};
+export { ButtonPostType, ButtonActionableType, PostButton, ActionableButton};
