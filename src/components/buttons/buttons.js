@@ -30,7 +30,7 @@ function PostButton(props) {
 
 function ActionableButton(props) {
     const icon = Icons[props.type];
-    const deleteCSS = props.type === ButtonActionableType.DELETE && 'button--actionable-delete';
+    const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button--actionable-delete' : undefined;
     return (
         <Button className='button--actionable'>
             <img src={icon} />

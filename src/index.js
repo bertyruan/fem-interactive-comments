@@ -60,8 +60,9 @@ function CommentDetails(props) {
 }
 
 function CommentCard(props) {
+    const className = props.className || "";
     return (
-        <div className="m-comment l-comment">
+        <div className={`m-comment l-comment ${className}`}>
             {props.children}
         </div>
     );
@@ -70,13 +71,13 @@ function CommentCard(props) {
 class CreateComment extends React.Component {
     constructor(props) {
         super(props);
-        this.userImageName = this.props.currentUser.username;
+        this.userImageName = props.currentUser.username;
     }
 
     defaultText = "Add a comment...";
     render() {
         return (
-            <CommentCard>
+            <CommentCard className="m-comment--create">
                 <TextAreaReply value={this.defaultText}></TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.userImageName}></ProfileImage>
@@ -90,8 +91,8 @@ class CreateComment extends React.Component {
 class Comment extends React.Component {
     constructor(props) {
         super(props);
-        this.comment = this.props.comment;
-        this.isCurrUsers = this.props.isUsers;   
+        this.comment = props.comment;
+        this.isCurrUsers = props.isUsers;   
     }
     
     getActionableButtons(isCurrUsers) {
@@ -108,12 +109,17 @@ class Comment extends React.Component {
         return <ActionableButton type={ButtonActionableType.REPLY} />;
     }
 
-    getPostButton(type) {
-        if(type === CommentStates.CREATE) {
-            return (
-                <PostButton type={ButtonPostType.SEND}></PostButton>
-            );
+    getContent(replyingTo) {
+        let c_replyingTo;
+        if(replyingTo) {
+            c_replyingTo = <span className="m-comment--replying-to">{`@${replyingTo} `}</span>;
         }
+        return (
+            <div className="comment-text l-comment--text">
+                {c_replyingTo && c_replyingTo}
+                { this.comment.content }
+            </div>
+        )
     }
 
     render() {
@@ -124,7 +130,7 @@ class Comment extends React.Component {
                     isCurrUsers={this.isCurrUsers} 
                     timeSpan={this.comment.createdAt} 
                 />
-                <div className="comment-text">{ this.comment.content }</div>
+                {this.getContent(this.comment.replyingTo)}
                 <div className="m-comment--actionables l-comment--actionables">
                     <LikabilityButton score={this.comment.score} />
                     {this.getActionableButtons(this.isCurrUsers)}
@@ -138,14 +144,45 @@ class CommentThread extends React.Component {
     comments = this.props.comments;
     currentUser = this.props.currentUser;
 
-    currComment = this.comments[0];
-    currCommentIsUsers = this.currComment.user.username === this.currentUser.username;
+    renderComments() {
+        const thread = [];
+        for(let i=0; i < this.comments.length; i++) {
+            const comment = this.comments[i];
+            const currCommentIsUsers = comment.user.username === this.currentUser.username;
+            const c_comment = <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} />;
+            thread.push(c_comment);
+
+            if(comment.replies?.length > 0) {
+                const replies = <ResponseThread key={`${comment.id}-reply`} replies={comment.replies} currentUser={this.currentUser} />;
+                thread.push(replies);
+            }
+        }
+        return thread;
+    }
 
     render() {
         return (
-            <Comment isUsers={this.currCommentIsUsers} comment={this.comments[0]}></Comment>
+            <div className="l-comment-thread">
+                {this.renderComments()}
+            </div>
         );
     }
+}
+
+function ResponseThread(props) {
+    const replies = props.replies;
+    const currentUser = props.currentUser;
+
+    if(props.replies.length <= 0) {
+        return;
+    }
+
+    return (
+        <div className="l-reply">
+            <div className="l-reply--vertical-dividor"></div>
+            <CommentThread comments={replies} currentUser={currentUser}></CommentThread>
+        </div>
+    );
 }
 
 class App extends React.Component {
