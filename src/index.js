@@ -38,9 +38,9 @@ function LikabilityButton(props) {
     }
     return (
         <div className="m-likability-button">
-            <button className="m-likability-button__like" onClick={handleLike} ><img src={Icons.plus} alt="like"></img></button>
-            <button className="m-likability-button__value">{props.score}</button>
-            <button className="m-likability-button__dislike" onClick={handleDislike}><img src={Icons.minus} alt="dislike"></img></button>
+            <button className="m-likability-button__like" onClick={handleLike} >{Icons.plus}</button>
+            <div className="m-likability-button__value">{props.score}</div>
+            <button className="m-likability-button__dislike" onClick={handleDislike}>{Icons.minus}</button>
         </div>
     );
 } 

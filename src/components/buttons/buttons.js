@@ -22,7 +22,7 @@ function Button(props) {
 //send, update, reply
 function PostButton(props) {
     return (
-        <Button className="button--post">
+        <Button className="button__post">
             {props.type}
         </Button>
     );
@@ -30,11 +30,11 @@ function PostButton(props) {
 
 function ActionableButton(props) {
     const icon = Icons[props.type];
-    const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button--actionable-delete' : undefined;
+    const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button__actionable--delete' : undefined;
     return (
-        <Button className='button--actionable'>
-            <img src={icon} />
-            <span className={deleteCSS}>{props.type}</span>
+        <Button className={`button__actionable ${deleteCSS}`}>
+            <span className='button__actionable--icon'>{icon}</span>
+            <span>{props.type}</span>
         </Button>
     );
 }

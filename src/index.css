@@ -17,6 +17,7 @@
 button {
     border: none;
     font: inherit;
+    --hover-color: hsla(238, 57%, 85%, 1);
 }
 
 body,
@@ -109,7 +110,8 @@ body {
 }
 
 .l-reply--vertical-dividor {
-    border: solid var(--border-color) 2px;
+    background-color: var(--border-color);
+    width: 4px;
     margin-right: 1rem;
 }
 
@@ -138,7 +140,16 @@ body {
 
 /* COMMENT TEXTAREA */
 
+textarea:hover {
+    cursor: pointer;
+}
+
+textarea:focus {
+    border: solid var(--primary-color) 2px;
+}
+
 textarea.comment-response {
+    overflow: auto;
     border: solid var(--border-color) 1px;
     border-radius: 8px;
     padding: .5rem 1rem;
@@ -194,11 +205,19 @@ textarea.comment-response {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: .25em;
+    gap: .5em;
     
     width: 100px;
     height: 40px;
     border-radius: 10px;
+}
+
+.m-likability-button svg {
+    fill: #C5C6EF;
+}
+
+.m-likability-button svg:hover {
+    fill: var(--primary-color);
 }
 
 .m-likability-button__like {

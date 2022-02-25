@@ -1,8 +1,8 @@
-import IconPlus from './assets/images/icon-plus.svg';
-import IconMinus from './assets/images/icon-minus.svg';
-import IconDelete from './assets/images/icon-delete.svg';
-import IconEdit from './assets/images/icon-edit.svg';
-import IconReply from './assets/images/icon-reply.svg';
+import {IconPlus} from './assets/images/icon-plus.js';
+import {IconMinus} from './assets/images/icon-minus.js';
+import {IconDelete} from './assets/images/icon-delete.js';
+import {IconEdit} from './assets/images/icon-edit.js';
+import {IconReply} from './assets/images/icon-reply.js';
 
 import AmyRobson from './assets/images/avatars/image-amyrobson.webp';
 import JuliuSomo from './assets/images/avatars/image-juliusomo.webp';
