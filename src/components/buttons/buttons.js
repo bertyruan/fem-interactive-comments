@@ -14,15 +14,16 @@ const ButtonActionableType = {
 }
 
 function Button(props) {
+    const id = props.commentId;
     return (
-        <button className={props.className}>{props.children}</button>
+        <button onClick={() => props.onClick(id)} className={props.className}>{props.children}</button>
     );
 }
 
 //send, update, reply
 function PostButton(props) {
     return (
-        <Button className="button__post">
+        <Button onClick={props.onClick} className="button__post">
             {props.type}
         </Button>
     );
@@ -30,9 +31,10 @@ function PostButton(props) {
 
 function ActionableButton(props) {
     const icon = Icons[props.type];
+    const id = props.comment.id;
     const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button__actionable--delete' : undefined;
     return (
-        <Button className={`button__actionable ${deleteCSS}`}>
+        <Button onClick={props.onClick} commentId={id} className={`button__actionable ${deleteCSS}`}>
             <span className='button__actionable--icon'>{icon}</span>
             <span>{props.type}</span>
         </Button>

@@ -1,23 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700");
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :root {
-    --primary-color: hsla(238, 40%, 52%, 1);
-    --warn-color: hsla(358, 79%, 66%, 1);
-    --bg-color: hsla(228, 33%, 97%, 1);
-    --font-color: hsla(211, 10%, 45%, 1);
-    --bold-font: hsla(212, 24%, 26%, 1);
-    --border-color: hsla(224, 19%, 93%, 1);
-    --comment-max-width: 730px;
+  --primary-color: hsla(238, 40%, 52%, 1);
+  --warn-color: hsla(358, 79%, 66%, 1);
+  --bg-color: hsla(228, 33%, 97%, 1);
+  --font-color: hsla(211, 10%, 45%, 1);
+  --bold-font: hsla(212, 24%, 26%, 1);
+  --border-color: hsla(224, 19%, 93%, 1);
+  --comment-max-width: 730px;
 }
 
 button {
-    border: none;
-    font: inherit;
-    --hover-color: hsla(238, 57%, 85%, 1);
+  border: none;
+  font: inherit;
+  --hover-color: hsla(238, 57%, 85%, 1);
 }
 
 body,
@@ -25,212 +25,210 @@ h1,
 h2,
 h3,
 p {
-    margin: 0;
+  margin: 0;
 }
 
 body {
-    font-family: 'Rubik', sans-serif;
-    color: var(--font-color);
-    background-color: var(--bg-color);
+  font-family: "Rubik", sans-serif;
+  color: var(--font-color);
+  background-color: var(--bg-color);
 }
 
 /* HELPER CLASSES */
 
 .comment-text {
-    font-size: 1rem;
-    line-height: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
 
-    /* calc is from the footer height */
-    min-height: calc(100vh - 23px);
+  /* calc is from the footer height */
+  min-height: calc(100vh - 23px);
 }
 
 /* COMMENT THREAD */
 
 .l-comment-thread {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: var(--comment-max-width);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: var(--comment-max-width);
 }
 
 /* COMMENT */
 
 .m-comment {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 1rem 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem 1rem;
 }
 
 .m-comment--create {
-    margin-top: 1rem;
-    width: 100%;
-    max-width: var(--comment-max-width);
+  margin-top: 1rem;
+  width: 100%;
+  max-width: var(--comment-max-width);
 }
 
 .l-comment {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.l-comment--desktop {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 16px;
 }
 
 .l-comment--text {
-    margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 
 .m-comment--replying-to {
-    font-weight: 500;
-    color: var(--primary-color);
+  font-weight: 500;
+  color: var(--primary-color);
 }
 
 .m-comment--actionables {
-    width: 100%;
+  width: 100%;
 }
 
 .l-comment--actionables {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: .5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* RESPONSE THREAD */
 
 .l-reply {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .l-reply--vertical-dividor {
-    background-color: var(--border-color);
-    width: 4px;
-    margin-right: 1rem;
+  background-color: var(--border-color);
+  width: 4px;
+  margin-right: 1rem;
 }
 
 /* CREATE COMMENT */
 
 .l-create-comment {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .l-create-comment__image {
-    align-self: flex-end;
+  align-self: flex-end;
 }
 
-
-
-
-
-
-
-
-
-
-
+/* RESPONSE COMMENT */
 
 /* COMMENT TEXTAREA */
 
 textarea:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 textarea:focus {
-    border: solid var(--primary-color) 2px;
+  border: solid var(--primary-color) 2px;
 }
 
 textarea.comment-response {
-    overflow: auto;
-    border: solid var(--border-color) 1px;
-    border-radius: 8px;
-    padding: .5rem 1rem;
-    resize: none;
-    width: 100%;
-    height: 100px;
-    font: inherit;
-    color: inherit;
+  overflow: auto;
+  border: solid var(--border-color) 1px;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  resize: none;
+  width: 100%;
+  height: 100px;
+  font: inherit;
+  color: inherit;
 }
 
 /* COMMENT DETAILS */
 
 .l-comment-details {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
 }
 
 .m-comment-details__username {
-    font-weight: 500;
-    color: var(--bold-font);
+  font-weight: 500;
+  color: var(--bold-font);
 }
 
 .m-comment-details__you {
-    background-color: var(--primary-color);
-    color: #fff;
-    font-weight: 500;
-    font-size: .81rem;
-    line-height: .96rem;
-    border-radius: 2px;
-    padding: .25em .5em;
-    margin-left: .5em;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.81rem;
+  line-height: 0.96rem;
+  border-radius: 2px;
+  padding: 0.25em 0.5em;
+  margin-left: 0.5em;
 }
 
 /* PROFILE IMAGE */
 
 .profile-image {
-    width: 2rem;
+  width: 2rem;
 }
 
 @media screen and (min-width: 1440px) {
-    .profile-image {
-        width: 3rem;
-    }
+  .profile-image {
+    width: 3rem;
+  }
 }
 
 /* LIKABILITY BUTTON */
 
 .m-likability-button {
-    background-color: hsl(228, 33%, 97%);
-    color: var(--primary-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: .5em;
-    
-    width: 100px;
-    height: 40px;
-    border-radius: 10px;
+  background-color: hsl(228, 33%, 97%);
+  color: var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
 }
 
 .m-likability-button svg {
-    fill: #C5C6EF;
+  fill: #c5c6ef;
 }
 
 .m-likability-button svg:hover {
-    fill: var(--primary-color);
+  fill: var(--primary-color);
 }
 
 .m-likability-button__like {
-    background-color: inherit;
+  background-color: inherit;
 }
 
 .m-likability-button__value {
-    background-color: inherit;
-    color: var(--primary-color);
-    font-weight: 500;
+  background-color: inherit;
+  color: var(--primary-color);
+  font-weight: 500;
 }
 
 .m-likability-button__dislike {
-    background-color: inherit;
-    display: flex;
+  background-color: inherit;
+  display: flex;
 }
