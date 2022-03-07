@@ -29,7 +29,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
             if (type ==='reply') {
                 if(comment.id === id) {
                     const replyingTo = comment.user.username;
-                    const mode = {...threadData, isEdit: true}
+                    const mode = {...threadData.mode, isReply: true};
                     const newComment = initComment('', data.user, replyingTo, mode);
                     if(replies) {
                         comment.replies.splice(0, 0, newComment);

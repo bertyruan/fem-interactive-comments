@@ -15,22 +15,22 @@ class CommentThread extends React.Component {
         }
     }
 
-    replyComment(id) {
-        // for(let i = 0; i < this.props.comments; i++) {
+    // replyComment(id) {
+    //     // for(let i = 0; i < this.props.comments; i++) {
             
-        // }
+    //     // }
         
-    }
+    // }
 
-    renderReplyComment() {
-        return (
-            <CreateComment type={CreateComment.REPLY} currentUser={this.currentUser}></CreateComment>
-        );
-    }
+    // renderReplyComment() {
+    //     return (
+    //         <CreateComment type={CreateComment.REPLY} currentUser={this.currentUser}></CreateComment>
+    //     );
+    // }
 
     renderComment(comment, currCommentIsUsers, isReply=false) {
         if(isReply) {
-            return <CreateComment currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
+            return <CreateComment key={comment.id} currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
         }
         return <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} callbacks={this.callbacks} />;
     }
@@ -40,10 +40,12 @@ class CommentThread extends React.Component {
     }
 
     renderComments() {
+        
         const thread = [];
         for(let i=0; i < this.props.comments.length; i++) {
             const comment = this.props.comments[i];
             const currCommentIsUsers = comment.user.username === this.currentUser.username;
+            console.log(comment);
             const c_comment = this.renderComment(comment, currCommentIsUsers, comment.mode.isReply);
             thread.push(c_comment);
 

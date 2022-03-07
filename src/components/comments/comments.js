@@ -1,4 +1,5 @@
 import React from 'react';
+import './comments.css';
 import {CommentCard, CommentDetails, LikabilityButton, ProfileImage, TextAreaReply} from './comments-helpers';
 import { ButtonActionableType, ActionableButton, PostButton, ButtonPostType } from './../buttons/buttons';
 
@@ -14,21 +15,24 @@ class CreateComment extends React.Component {
         this.userImageName = props.currentUser.username;
         this.defaultText = "";
         this.buttonType = "";
+        this.className = "";
         this.setType(props.type);
     }
 
     setType(type) {
         if(type === CreateComment.type.CREATE) {
             this.defaultText = "Add a comment...";
+            this.className = "m-comment--create";
             this.buttonType = ButtonPostType.SEND;
         } else {
+            this.className = "m-comment--reply";
             this.buttonType = ButtonPostType.REPLY;
         }
     }
 
     render() {
         return (
-            <CommentCard className="l-comment m-comment--create">
+            <CommentCard className={`l-comment ${this.className}`}>
                 <TextAreaReply value={this.defaultText}></TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.userImageName}></ProfileImage>
