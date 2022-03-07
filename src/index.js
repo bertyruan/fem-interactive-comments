@@ -111,8 +111,6 @@ class Comment extends React.Component {
         this.isCurrUsers = props.isUsers;
         this.callbacks = props.callbacks;
     }
-
-    
     
     getActionableButtons(isCurrUsers) {
         if(isCurrUsers) {
@@ -167,11 +165,17 @@ class CommentThread extends React.Component {
         this.callbacks = this.props.callbacks;  
     }
 
-    getComment(comment, currCommentIsUsers) {
+    renderReplyComment() {
+        return (
+            <CreateComment type={CreateComment.REPLY} currentUser={this.currentUser}></CreateComment>
+        );
+    }
+
+    renderComment(comment, currCommentIsUsers) {
         return <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} callbacks={this.callbacks} />;
     }
 
-    getResponseThread(comment) {
+    renderResponseThread(comment) {
         return <ResponseThread key={`${comment.id}-reply`} replies={comment.replies} currentUser={this.currentUser} callbacks={this.callbacks} />;
     }
 
@@ -180,11 +184,11 @@ class CommentThread extends React.Component {
         for(let i=0; i < this.props.comments.length; i++) {
             const comment = this.props.comments[i];
             const currCommentIsUsers = comment.user.username === this.currentUser.username;
-            const c_comment = this.getComment(comment, currCommentIsUsers);
+            const c_comment = this.renderComment(comment, currCommentIsUsers);
             thread.push(c_comment);
 
             if(comment.replies?.length > 0) {
-                const replies = this.getResponseThread(comment);
+                const replies = this.renderResponseThread(comment);
                 thread.push(replies);
             }
         }
@@ -230,14 +234,7 @@ class App extends React.Component {
             reply: this.replyComment.bind(this)
         }
     }
-
-    deleteComment(id) {
-        this.setState(prevState => ({
-            comments: this.buildNewComments([...prevState.comments], id, 'delete')
-        }));
-        
-    }
-
+    
     buildNewComments(comments, id, type, content, user) {
         let newComments = [];
         for(let i = 0; i < comments.length; i++) {
@@ -276,15 +273,23 @@ class App extends React.Component {
         return newComments;
     }
 
+    deleteComment(id) {
+        this.setState(prevState => ({
+            comments: this.buildNewComments([...prevState.comments], id, 'delete')
+        }));
+    }
+
     editComment(id, content) {
-        
+        this.setState(prevState => ({
+            comments: this.buildNewComments([...prevState.comments], id, 'edit', content)
+        }));        
     }
 
     replyComment(id, content, user) {
-
+        this.setState(prevState => ({
+            comments: this.buildNewComments([...prevState.comments], id, 'reply', content, user)
+        }));
     }
-
-
 
     newComment(content, username, replyingToId=-1) {
         let replyingTo = "";
@@ -335,7 +340,6 @@ class App extends React.Component {
         );
     }
 }
-
 
 ReactDOM.render(
     <App />,
