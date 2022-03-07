@@ -1,4 +1,7 @@
-function buildNewThread(comments, id, type, content, user) {
+const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false}};
+const parentThread = {comments: [], id: -1 }
+
+function buildNewThread(type, comments, id, data=threadData, parent=parentThread) {
     let newComments = [];
     for(let i = 0; i < comments.length; i++) {
         const comment = comments[i];
@@ -7,7 +10,7 @@ function buildNewThread(comments, id, type, content, user) {
         if(type === 'delete') {
             if(comment.id !== id) {
                 if(replies && comment.replies.length > 0) {
-                    let newReplies = buildNewThread(comment.replies, id, type);
+                    const newReplies = buildNewThread(type, comment.replies, id);
                     comment.replies = newReplies;
                 }
                 newComments.push(comment);
@@ -16,18 +19,45 @@ function buildNewThread(comments, id, type, content, user) {
         else {
             if (type === 'edit') {
                 if(comment.id === id) {
-                    comment.content = content;
+                    comment.content = data.content;
                 } 
                 if(replies && comment.replies.length > 0) {
-                    let newReplies = buildNewThread(comment.replies, id, type, content, user);
+                    const newReplies = buildNewThread(type, comment.replies, id, data);
                     comment.replies = newReplies;
                 }
             }
-            if(type=== 'reply') {
+            if (type ==='reply') {
                 if(comment.id === id) {
                     const replyingTo = comment.user.username;
-                    const newComment = initComment(content, user, replyingTo);
+                    const mode = {...threadData, isEdit: true}
+                    const newComment = initComment('', data.user, replyingTo, mode);
+                    if(replies) {
+                        comment.replies.splice(0, 0, newComment);
+                    }
+                    else {
+                        const commentIndex = comments.indexOf((comment) => comment.id === id);
+                        comments.splice(commentIndex, 0, newComment);
+                    }
+                }
+                if(replies && comment.replies.length > 0) {
+                    const parentThread = {comments: comments, id: comment.id};
+                    const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
+                    comment.replies = newReplies;
+                }
+            }
+            
+            if(type=== 'create') {
+                if(comment.id === id) {
+                    const replyingTo = comment.user.username;
+                    const newComment = initComment(data.content, data.user, replyingTo);
                     comment.replies.push(newComment);
+                }
+            }
+            if(type==='dto') {
+                comment.mode = { isEdit: false, isReply: false };
+                if(replies && comment.replies.length > 0) {
+                    const newReplies = buildNewThread('dto', comment.replies);
+                    comment.replies = newReplies;
                 }
             }
             newComments.push(comment);
@@ -37,7 +67,7 @@ function buildNewThread(comments, id, type, content, user) {
     return newComments;
 }
 
-function initComment(content, username, replyingTo) {
+function initComment(content, username, replyingTo, mode=threadData.mode) {
     const comment = {
         id: Math.floor(Math.random() * 100000000),
         content: content,
@@ -49,7 +79,8 @@ function initComment(content, username, replyingTo) {
                 webp: `./images/avatars/image-${username}.webp`
             },
             username: username
-        }
+        },
+        mode: mode
     }
     if(replyingTo) {
         comment.replyingTo = replyingTo;
@@ -60,4 +91,4 @@ function initComment(content, username, replyingTo) {
     return comment;
 }
 
-export {initComment, buildNewThread}
+export {initComment, buildNewThread, threadData}

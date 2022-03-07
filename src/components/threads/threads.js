@@ -6,7 +6,20 @@ class CommentThread extends React.Component {
         super(props);
         //this.props.comments
         this.currentUser = this.props.currentUser;
-        this.callbacks = this.props.callbacks;  
+        this.parentCallbacks = this.props.callbacks;
+        this.callbacks = {
+            delete: this.parentCallbacks.delete,
+            edit: this.parentCallbacks.edit,
+            reply: this.parentCallbacks.reply,
+            // reply: this.replyComment.bind(this)
+        }
+    }
+
+    replyComment(id) {
+        // for(let i = 0; i < this.props.comments; i++) {
+            
+        // }
+        
     }
 
     renderReplyComment() {
@@ -15,7 +28,10 @@ class CommentThread extends React.Component {
         );
     }
 
-    renderComment(comment, currCommentIsUsers) {
+    renderComment(comment, currCommentIsUsers, isReply=false) {
+        if(isReply) {
+            return <CreateComment currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
+        }
         return <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} callbacks={this.callbacks} />;
     }
 
@@ -28,7 +44,7 @@ class CommentThread extends React.Component {
         for(let i=0; i < this.props.comments.length; i++) {
             const comment = this.props.comments[i];
             const currCommentIsUsers = comment.user.username === this.currentUser.username;
-            const c_comment = this.renderComment(comment, currCommentIsUsers);
+            const c_comment = this.renderComment(comment, currCommentIsUsers, comment.mode.isReply);
             thread.push(c_comment);
 
             if(comment.replies?.length > 0) {

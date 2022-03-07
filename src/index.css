@@ -90,6 +90,7 @@ body {
 }
 
 .l-comment--text {
+  align-self: flex-start;
   margin-bottom: 0.75rem;
 }
 

@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread} from './components/helpers/helpers'
+import { buildNewThread, threadData } from './components/helpers/helpers'
 import { CommentThread} from './components/threads/threads'
 import { CreateComment } from './components/comments/comments';
-
 
 const CommentStates = {
     DEFAULT: 'default',
@@ -20,30 +19,43 @@ class App extends React.Component {
         super(props);
         this.state = {
             currentUser: Data.currentUser,
-            comments: Data.comments
+            comments: buildNewThread('dto', Data.comments)
         }
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
-            reply: this.replyComment.bind(this)
+            reply: this.replyComment.bind(this),
+            create: this.createComment.bind(this)
         }
     }
     
     deleteComment(id) {
         this.setState(prevState => ({
-            comments: buildNewThread([...prevState.comments], id, 'delete')
+            comments: buildNewThread('delete', [...prevState.comments], id)
         }));
     }
 
     editComment(id, content) {
+        const data = {...threadData, content: "blah blah black sheep"};
+        
         this.setState(prevState => ({
-            comments: buildNewThread([...prevState.comments], id, 'edit', content)
+            comments: buildNewThread('edit', [...prevState.comments], id, data)
         }));        
     }
 
-    replyComment(id, content, user) {
+    replyComment(id, user) {
+        const data = {...threadData, data: {user: user}};
+
         this.setState(prevState => ({
-            comments: buildNewThread([...prevState.comments], id, 'reply', content, user)
+            comments: buildNewThread('reply', [...prevState.comments], id, data)
+        }));  
+    }
+
+    createComment(id, content, user) {
+        const data = {...threadData, data:{user: user, content: content}};
+ 
+        this.setState(prevState => ({
+            comments: buildNewThread('create', [...prevState.comments], id, data)
         }));
     }
 
