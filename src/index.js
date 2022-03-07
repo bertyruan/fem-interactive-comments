@@ -33,14 +33,16 @@ class App extends React.Component {
         this.setState(prevState => ({
             comments: buildNewThread('delete', [...prevState.comments], id)
         }));
+        return true;
     }
-
+  
     editComment(id, content) {
         const data = {...threadData, content: "blah blah black sheep"};
         
         this.setState(prevState => ({
             comments: buildNewThread('edit', [...prevState.comments], id, data)
         }));        
+        return true;
     }
 
     replyComment(id, user) {
@@ -49,6 +51,7 @@ class App extends React.Component {
         this.setState(prevState => ({
             comments: buildNewThread('reply', [...prevState.comments], id, data)
         }));  
+        return true;
     }
 
     createComment(id, content, user) {
@@ -57,6 +60,7 @@ class App extends React.Component {
         this.setState(prevState => ({
             comments: buildNewThread('create', [...prevState.comments], id, data)
         }));
+        return true;
     }
 
     render() {

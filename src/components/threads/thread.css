@@ -1,0 +1,14 @@
+.l-reply {
+  display: flex;
+  width: 100%;
+}
+
+.l-reply--vertical-dividor {
+  background-color: var(--border-color);
+  width: 2px;
+  margin-right: 1rem;
+}
+
+.m-comment-thread--response {
+  width: 100%;
+}

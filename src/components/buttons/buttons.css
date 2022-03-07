@@ -1,53 +1,53 @@
 button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .button__post {
-    background-color: var(--primary-color);
-    color: #fff;
-    font-weight: 500;
-    line-height: 1.5rem;
-    text-transform: uppercase;
-    border-radius: 8px;
-    padding: .5rem 1.5rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.5rem;
+  text-transform: uppercase;
+  border-radius: 8px;
+  padding: 0.5rem 1.5rem;
 }
 
 .button__post:hover {
-    background-color: hsla(238, 57%, 85%, 1);
+  background-color: hsla(238, 57%, 85%, 1);
 }
 
 .button__actionable {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    background: none;
-    color: var(--primary-color);
-    fill: var(--primary-color);
-    font-weight: 500;
-    text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  color: var(--primary-color);
+  fill: var(--primary-color);
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 .button__actionable--delete {
-    color: var(--warn-color);
-    fill: var(--warn-color);
+  color: var(--warn-color);
+  fill: var(--warn-color);
 }
 
-button.button__actionable:hover {
-    color: var(--hover-color);
-    fill: var(--hover-color);
+button.button__actionable:hover,
+.button__actionable:disabled {
+  color: var(--hover-color);
+  fill: var(--hover-color);
 }
 
-button.button__actionable--delete:hover {
-    color: #FFB8BB;
-    fill: #FFB8BB;
+button.button__actionable--delete:hover,
+.button__actionable--delete:disabled {
+  color: #ffb8bb;
+  fill: #ffb8bb;
 }
 
 .button__actionable--icon > svg {
-    fill: inherit;
+  fill: inherit;
 }
 
 .button__actionable--icon > svg:hover {
-    fill: inherit;
+  fill: inherit;
 }
-
-

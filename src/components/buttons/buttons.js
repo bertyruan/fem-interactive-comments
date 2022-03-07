@@ -1,5 +1,6 @@
 import './buttons.css';
 import {Icons} from '../../static-images';
+import React from 'react';
 
 const ButtonPostType = {
     SEND: 'send',
@@ -13,17 +14,30 @@ const ButtonActionableType = {
     REPLY: 'reply'
 }
 
-function Button(props) {
-    const id = props.commentId;
-    return (
-        <button onClick={() => props.onClick(id)} className={props.className}>{props.children}</button>
-    );
+class Button extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isEnabled: true
+        }
+    }
+ 
+    // onClick(id) {   
+    //     const isEnabled = !this.props.onClick(id);
+    //     this.setState(prev => prev.isEnabled = isEnabled);
+    // }
+
+    render() {
+        return (
+            <button disabled={this.props.disabled} onClick={() => this.props.onClick(this.props.commentId)} className={this.props.className}>{this.props.children}</button>
+        );
+    }
 }
 
 //send, update, reply
 function PostButton(props) {
     return (
-        <Button onClick={props.onClick} className="button__post">
+        <Button disabled={props.disabled} onClick={props.onClick} className="button__post">
             {props.type}
         </Button>
     );
@@ -34,7 +48,7 @@ function ActionableButton(props) {
     const id = props.comment.id;
     const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button__actionable--delete' : undefined;
     return (
-        <Button onClick={props.onClick} commentId={id} className={`button__actionable ${deleteCSS}`}>
+        <Button disabled={props.disabled} onClick={props.onClick} commentId={id} className={`button__actionable ${deleteCSS}`}>
             <span className='button__actionable--icon'>{icon}</span>
             <span>{props.type}</span>
         </Button>
