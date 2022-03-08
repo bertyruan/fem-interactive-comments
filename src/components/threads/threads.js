@@ -12,6 +12,7 @@ class CommentThread extends React.Component {
         this.callbacks = {
             delete: this.parentCallbacks.delete,
             edit: this.parentCallbacks.edit,
+            create: this.parentCallbacks.create,
             reply: this.replyComment.bind(this)
         }
         this.state = {
@@ -21,7 +22,7 @@ class CommentThread extends React.Component {
 
     replyComment(id) {
         if(!this.state.isInEditMode.includes(id)) {
-            this.parentCallbacks.reply(id);
+            this.parentCallbacks.reply(id, this.currentUser.username);
             this.setState(prevState => prevState.isInEditMode.push(id));
             return true;
         }
@@ -30,7 +31,7 @@ class CommentThread extends React.Component {
 
     renderComment(comment, currCommentIsUsers, isReply=false) {
         if(isReply) {
-            return <CreateComment key={comment.id} currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
+            return <CreateComment key={comment.id} onReply={this.callbacks.create} id={comment.id} currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
         }
         // if(this.state.isInEditMode.includes(comment.id))
         return <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} callbacks={this.callbacks} />;

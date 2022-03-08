@@ -38,6 +38,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                         const commentIndex = comments.indexOf((comment) => comment.id === id);
                         comments.splice(commentIndex, 0, newComment);
                     }
+                    console.log(newComment);
                 }
                 if(replies && comment.replies.length > 0) {
                     const parentThread = {comments: comments, id: comment.id};
@@ -46,14 +47,18 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                 }
             }
             
-            if(type=== 'create') {
+            if(type === 'create') {
                 if(comment.id === id) {
-                    const replyingTo = comment.user.username;
-                    const newComment = initComment(data.content, data.user, replyingTo);
-                    comment.replies.push(newComment);
+                    comment.content= data.content;
+                    comment.mode.isReply = false;
+                    console.log(comment);
+                }
+                if(replies && comment.replies.length > 0) {
+                    const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
+                    comment.replies = newReplies;
                 }
             }
-            if(type==='dto') {
+            if(type ==='dto') {
                 comment.mode = { isEdit: false, isReply: false };
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread('dto', comment.replies);
@@ -82,6 +87,7 @@ function initComment(content, username, replyingTo, mode=threadData.mode) {
         },
         mode: mode
     }
+    console.log('initcomment', username, comment);
     if(replyingTo) {
         comment.replyingTo = replyingTo;
     } else {

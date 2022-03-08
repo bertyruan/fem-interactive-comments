@@ -12,7 +12,7 @@ class CreateComment extends React.Component {
 
     constructor(props) {
         super(props);
-        this.userImageName = props.currentUser.username;
+        this.username = props.currentUser.username;
         this.defaultText = "";
         this.buttonType = "";
         this.className = "";
@@ -35,8 +35,8 @@ class CreateComment extends React.Component {
             <CommentCard className={`l-comment ${this.className}`}>
                 <TextAreaReply value={this.defaultText}></TextAreaReply>
                 <div className="l-create-comment">
-                    <ProfileImage className="l-create-comment__image" imageName={this.userImageName}></ProfileImage>
-                    <PostButton type={this.buttonType}></PostButton>
+                    <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
+                    <PostButton onClick={() => this.props.onReply(this.props.id, this.username, 'content')} type={this.buttonType}></PostButton>
                 </div>
             </CommentCard>
         );

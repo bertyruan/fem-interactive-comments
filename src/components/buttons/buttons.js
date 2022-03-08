@@ -15,12 +15,12 @@ const ButtonActionableType = {
 }
 
 class Button extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isEnabled: true
-        }
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         isEnabled: true
+    //     }
+    // }
  
     // onClick(id) {   
     //     const isEnabled = !this.props.onClick(id);

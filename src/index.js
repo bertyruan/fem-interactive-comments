@@ -46,7 +46,7 @@ class App extends React.Component {
     }
 
     replyComment(id, user) {
-        const data = {...threadData, data: {user: user}};
+        const data = {...threadData, user: user};
 
         this.setState(prevState => ({
             comments: buildNewThread('reply', [...prevState.comments], id, data)
@@ -54,7 +54,7 @@ class App extends React.Component {
         return true;
     }
 
-    createComment(id, content, user) {
+    createComment(id, user, content) {
         const data = {...threadData, data:{user: user, content: content}};
  
         this.setState(prevState => ({

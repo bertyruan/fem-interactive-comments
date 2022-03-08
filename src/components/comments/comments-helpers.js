@@ -9,7 +9,6 @@ function TextAreaReply(props) {
 function ProfileImage(props) {
     const image = Avatars[props.imageName];
     const classNames = `profile-image ${props.className}`;
-
     return (
         <img className={classNames} src={image} alt="profile"></img>
     );
