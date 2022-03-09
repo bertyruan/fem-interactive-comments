@@ -1,5 +1,6 @@
 const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false}};
 const parentThread = {comments: [], id: -1 }
+const rootId = -1;
 
 function buildNewThread(type, comments, id, data=threadData, parent=parentThread) {
     let newComments = [];
@@ -38,7 +39,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                         const commentIndex = comments.indexOf((comment) => comment.id === id);
                         comments.splice(commentIndex, 0, newComment);
                     }
-                    console.log(newComment);
+           
                 }
                 if(replies && comment.replies.length > 0) {
                     const parentThread = {comments: comments, id: comment.id};
@@ -51,7 +52,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                 if(comment.id === id) {
                     comment.content= data.content;
                     comment.mode.isReply = false;
-                    console.log(comment);
+           
                 }
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
@@ -87,7 +88,6 @@ function initComment(content, username, replyingTo, mode=threadData.mode) {
         },
         mode: mode
     }
-    console.log('initcomment', username, comment);
     if(replyingTo) {
         comment.replyingTo = replyingTo;
     } else {
@@ -97,4 +97,18 @@ function initComment(content, username, replyingTo, mode=threadData.mode) {
     return comment;
 }
 
-export {initComment, buildNewThread, threadData}
+function getParentComment(comments, id) {
+    for(let i = 0; i < comments.length; i++) {
+        let parent = comments[i];
+        let replies = parent.replies;
+        for(let j = 0; replies && j < replies.length; j++) {
+            let children = parent.replies[j];
+            if(children.id === id) {
+                return parent;
+            }
+        }
+    }
+    return -1;
+}
+
+export {initComment, buildNewThread, getParentComment, threadData, rootId}

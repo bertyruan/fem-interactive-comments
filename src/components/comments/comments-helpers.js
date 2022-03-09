@@ -16,10 +16,10 @@ function ProfileImage(props) {
 
 function LikabilityButton(props) {
     const handleLike = () => {
-        console.log('like');
+       
     }
     const handleDislike = () => {
-        console.log('dislike');
+   
     }
     return (
         <div className="m-likability-button">

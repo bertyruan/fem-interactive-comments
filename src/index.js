@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData } from './components/helpers/helpers'
+import { buildNewThread, threadData, rootId } from './components/helpers/helpers'
 import { CommentThread} from './components/threads/threads'
 import { CreateComment } from './components/comments/comments';
 
@@ -65,12 +65,14 @@ class App extends React.Component {
 
     render() {
         return (
-            <React.StrictMode>
+            <div>
                 <main className="container">
                     <CommentThread 
                         currentUser={this.state.currentUser} 
                         comments={this.state.comments}
-                        callbacks={this.callbacks} />
+                        callbacks={this.callbacks} 
+                        parentId={rootId}
+                        />
                     <CreateComment type={CreateComment.type.CREATE} currentUser={this.state.currentUser} />
                 </main>
                 <footer>
@@ -78,7 +80,7 @@ class App extends React.Component {
                     <button onClick={() => {this.editComment()}}></button>
                 </footer>
                 {/* <CreateComment type={CreateComment.type.REPLY} currentUser={this.data.comments[0].user}></CreateComment> */}
-            </React.StrictMode>
+            </div>
         );
     }
 }

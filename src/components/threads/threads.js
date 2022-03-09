@@ -1,10 +1,12 @@
 import React from 'react';
 import {CreateComment, Comment} from './../comments/comments';
+import { getParentComment, rootId } from './../helpers/helpers';
 import './thread.css';
 
 class CommentThread extends React.Component {
     constructor(props) {
         super(props);
+        this.id = Math.random();
         //this.props.comments
         this.currentUser = this.props.currentUser;
         this.parentCallbacks = this.props.callbacks;
@@ -12,7 +14,7 @@ class CommentThread extends React.Component {
         this.callbacks = {
             delete: this.parentCallbacks.delete,
             edit: this.parentCallbacks.edit,
-            create: this.parentCallbacks.create,
+            create: this.createComment.bind(this),
             reply: this.replyComment.bind(this)
         }
         this.state = {
@@ -20,25 +22,60 @@ class CommentThread extends React.Component {
         }
     }
 
+    isRoot(id) {
+        return id === rootId;
+    }
+
     replyComment(id) {
         if(!this.state.isInEditMode.includes(id)) {
             this.parentCallbacks.reply(id, this.currentUser.username);
-            this.setState(prevState => prevState.isInEditMode.push(id));
+            this.setState(prevState => {
+                console.log(prevState, id);
+                return [id];//prevState.isInEditMode.concat([id])
+            });
+            
             return true;
         }
         return false;
     }
 
+    createComment(id, username, content) {
+        const parentCommentId = getParentComment(this.props.comments, id);
+        console.log(this.id, this.props.comments, id, this.state.isInEditMode, parentCommentId);
+        this.parentCallbacks.create(id, username, content);
+    }
+
     renderComment(comment, currCommentIsUsers, isReply=false) {
         if(isReply) {
-            return <CreateComment key={comment.id} onReply={this.callbacks.create} id={comment.id} currentUser={this.currentUser} type={CreateComment.type.REPLY}></CreateComment>
+            console.log('isReply', comment);
+            return <CreateComment 
+                        key={comment.id} 
+                        onReply={this.callbacks.create} 
+                        id={comment.id} 
+                        currentUser={this.currentUser} 
+                        type={CreateComment.type.REPLY}>
+                    </CreateComment>
         }
         // if(this.state.isInEditMode.includes(comment.id))
-        return <Comment key={comment.id} isUsers={currCommentIsUsers} comment={comment} callbacks={this.callbacks} />;
+        return <Comment 
+                    key={comment.id} 
+                    isUsers={currCommentIsUsers} 
+                    comment={comment} 
+                    callbacks={this.callbacks} 
+                />;
     }
 
     renderResponseThread(comment) {
-        return <ResponseThread key={`${comment.id}-reply`} replies={comment.replies} currentUser={this.currentUser} callbacks={this.callbacks} />;
+        return (
+        <ResponseThread key={`${comment.id}-reply`} >
+            <CommentThread 
+                className="m-comment-thread--response"
+                comments={comment.replies} 
+                currentUser={this.currentUser} 
+                callbacks={this.parentCallbacks} 
+                parentId={comment.id}
+            />;
+        </ResponseThread>);
     }
 
     renderComments() {
@@ -67,18 +104,11 @@ class CommentThread extends React.Component {
 }
 
 function ResponseThread(props) {
-    const replies = props.replies;
-    const currentUser = props.currentUser;
-    const callbacks = props.callbacks;
-
-    if(props.replies.length <= 0) {
-        return;
-    }
-
     return (
         <div className="l-reply">
             <div className="l-reply--vertical-dividor"></div>
-            <CommentThread className="m-comment-thread--response" comments={replies} currentUser={currentUser} callbacks={callbacks}></CommentThread>
+            {props.children}
+            {/* <CommentThread className="m-comment-thread--response" comments={replies} currentUser={currentUser} callbacks={callbacks}></CommentThread> */}
         </div>
     );
 }
