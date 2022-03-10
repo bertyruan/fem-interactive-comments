@@ -19,13 +19,51 @@ class App extends React.Component {
         super(props);
         this.state = {
             currentUser: Data.currentUser,
-            comments: buildNewThread('dto', Data.comments)
+            comments: buildNewThread('dto', Data.comments),
+            modes: {
+                edit: [],
+                reply: []
+            }
         }
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
             reply: this.replyComment.bind(this),
-            create: this.createComment.bind(this)
+            create: this.createComment.bind(this),
+            checkMode: this.checkMode.bind(this),
+            updateMode: this.updateMode.bind(this)
+        }
+    }
+
+    checkMode(id, type) {
+        if(type === 'edit') {
+
+        }
+        if(type === 'reply') {
+            return this.state.modes.reply.includes(id);
+        }
+        return false;
+    }
+
+    updateMode(id, type) {
+        if(type === 'edit') {
+
+        }
+        if(type === 'reply') {
+            this.setState(prevState => { 
+                let modes =  [...prevState.modes.reply];
+                if(this.checkMode(id, type)) {
+                    modes = modes.filter((modeId) => modeId !== id);
+                } else {
+                    modes =  modes.concat(id);
+                }
+                return {
+                    modes: {
+                        reply: modes,
+                        edit: prevState.modes.edit
+                    }
+                }
+            });
         }
     }
     
@@ -70,7 +108,7 @@ class App extends React.Component {
                     <CommentThread 
                         currentUser={this.state.currentUser} 
                         comments={this.state.comments}
-                        callbacks={this.callbacks} 
+                        callbacks={this.callbacks}
                         parentId={rootId}
                         />
                     <CreateComment type={CreateComment.type.CREATE} currentUser={this.state.currentUser} />

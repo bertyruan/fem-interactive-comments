@@ -6,7 +6,7 @@ import './thread.css';
 class CommentThread extends React.Component {
     constructor(props) {
         super(props);
-        this.id = Math.random();
+        this.id = Math.floor(Math.random() * 10);
         //this.props.comments
         this.currentUser = this.props.currentUser;
         this.parentCallbacks = this.props.callbacks;
@@ -15,10 +15,9 @@ class CommentThread extends React.Component {
             delete: this.parentCallbacks.delete,
             edit: this.parentCallbacks.edit,
             create: this.createComment.bind(this),
-            reply: this.replyComment.bind(this)
-        }
-        this.state = {
-            isInEditMode: []
+            reply: this.replyComment.bind(this),
+            checkMode: this.parentCallbacks.checkMode,
+            updateMode: this.parentCallbacks.updateMode
         }
     }
 
@@ -27,12 +26,9 @@ class CommentThread extends React.Component {
     }
 
     replyComment(id) {
-        if(!this.state.isInEditMode.includes(id)) {
+        if(!this.callbacks.checkMode(id, 'reply')) {
+            this.callbacks.updateMode(id, 'reply');
             this.parentCallbacks.reply(id, this.currentUser.username);
-            this.setState(prevState => {
-                console.log(prevState, id);
-                return [id];//prevState.isInEditMode.concat([id])
-            });
             
             return true;
         }
@@ -40,14 +36,12 @@ class CommentThread extends React.Component {
     }
 
     createComment(id, username, content) {
-        const parentCommentId = getParentComment(this.props.comments, id);
-        console.log(this.id, this.props.comments, id, this.state.isInEditMode, parentCommentId);
+        this.callbacks.updateMode(this.props.parentId, 'reply');
         this.parentCallbacks.create(id, username, content);
     }
 
     renderComment(comment, currCommentIsUsers, isReply=false) {
         if(isReply) {
-            console.log('isReply', comment);
             return <CreateComment 
                         key={comment.id} 
                         onReply={this.callbacks.create} 
@@ -72,7 +66,7 @@ class CommentThread extends React.Component {
                 className="m-comment-thread--response"
                 comments={comment.replies} 
                 currentUser={this.currentUser} 
-                callbacks={this.parentCallbacks} 
+                callbacks={this.props.callbacks} 
                 parentId={comment.id}
             />;
         </ResponseThread>);

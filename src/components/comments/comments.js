@@ -36,7 +36,12 @@ class CreateComment extends React.Component {
                 <TextAreaReply value={this.defaultText}></TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
-                    <PostButton onClick={() => this.props.onReply(this.props.id, this.username, 'content')} type={this.buttonType}></PostButton>
+                    <PostButton 
+                        onClick={() => this.props.onReply(this.props.id, this.username, 'content')} 
+                        type={this.buttonType}
+                        commentId={this.props.id}
+                        disabled={() => {}}>
+                    </PostButton>
                 </div>
             </CommentCard>
         );
@@ -57,12 +62,25 @@ class Comment extends React.Component {
             const edit = ButtonActionableType.EDIT;
             return (
                 <div className="l-comment--actionables">
-                    <ActionableButton type={del} comment={this.comment} onClick={this.callbacks.delete}/>
-                    <ActionableButton type={edit} comment={this.comment} onClick={this.callbacks.edit} />
+                    <ActionableButton 
+                        type={del} 
+                        comment={this.comment} 
+                        disabled={() => {}}
+                        onClick={this.callbacks.delete}/>
+                    <ActionableButton 
+                        type={edit} 
+                        comment={this.comment}
+                        disabled={() => {}}  
+                        onClick={this.callbacks.edit} />
                 </div>
             );
         }
-        return <ActionableButton type={ButtonActionableType.REPLY} comment={this.comment} onClick={this.callbacks.reply} />;
+        return (
+            <ActionableButton 
+                type={ButtonActionableType.REPLY} 
+                comment={this.comment} 
+                disabled={() => this.callbacks.checkMode(this.comment.id, 'reply')}
+                onClick={this.callbacks.reply} />);
     }
 
     getContent(replyingTo) {

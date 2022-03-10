@@ -28,8 +28,14 @@ class Button extends React.Component {
     // }
 
     render() {
+        // console.log(this.props.commentId);
         return (
-            <button disabled={this.props.disabled} onClick={() => this.props.onClick(this.props.commentId)} className={this.props.className}>{this.props.children}</button>
+            <button 
+                disabled={this.props.disabled()} 
+                onClick={() => this.props.onClick(this.props.commentId)} 
+                className={this.props.className}>
+                    {this.props.children}
+            </button>
         );
     }
 }
@@ -37,8 +43,12 @@ class Button extends React.Component {
 //send, update, reply
 function PostButton(props) {
     return (
-        <Button disabled={props.disabled} onClick={props.onClick} className="button__post">
-            {props.type}
+        <Button 
+            disabled={props.disabled} 
+            onClick={props.onClick} 
+            commentId={props.commentId} 
+            className="button__post">
+                {props.type}
         </Button>
     );
 }
@@ -48,9 +58,13 @@ function ActionableButton(props) {
     const id = props.comment.id;
     const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button__actionable--delete' : undefined;
     return (
-        <Button disabled={props.disabled} onClick={props.onClick} commentId={id} className={`button__actionable ${deleteCSS}`}>
-            <span className='button__actionable--icon'>{icon}</span>
-            <span>{props.type}</span>
+        <Button 
+            disabled={props.disabled} 
+            onClick={props.onClick} 
+            commentId={id} 
+            className={`button__actionable ${deleteCSS}`}>
+                <span className='button__actionable--icon'>{icon}</span>
+                <span>{props.type}</span>
         </Button>
     );
 }
