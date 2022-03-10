@@ -21,7 +21,7 @@ class App extends React.Component {
             currentUser: Data.currentUser,
             comments: buildNewThread('dto', Data.comments),
             modes: {
-                edit: [],
+                edit: [], //[parentId, childId] tuples
                 reply: []
             }
         }

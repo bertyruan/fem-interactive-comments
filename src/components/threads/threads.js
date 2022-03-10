@@ -25,18 +25,17 @@ class CommentThread extends React.Component {
         return id === rootId;
     }
 
-    replyComment(id) {
-        if(!this.callbacks.checkMode(id, 'reply')) {
-            this.callbacks.updateMode(id, 'reply');
-            this.parentCallbacks.reply(id, this.currentUser.username);
-            
+    replyComment(parentId) {
+        if(!this.callbacks.checkMode(parentId, 'reply')) {
+            const childId = this.parentCallbacks.reply(parentId, this.currentUser.username);
+            this.callbacks.updateMode([parentId, childId], 'reply');
             return true;
         }
         return false;
     }
 
     createComment(id, username, content) {
-        this.callbacks.updateMode(this.props.parentId, 'reply');
+        this.callbacks.updateMode(this.props.comments.modes.replyId, 'reply');
         this.parentCallbacks.create(id, username, content);
     }
 

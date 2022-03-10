@@ -73,7 +73,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
     return newComments;
 }
 
-function initComment(content, username, replyingTo, mode=threadData.mode) {
+function initComment(content, username, replyingTo, mode={...threadData.mode}) {
     const comment = {
         id: Math.floor(Math.random() * 100000000),
         content: content,
