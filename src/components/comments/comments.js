@@ -72,7 +72,23 @@ class CreateComment extends React.Component {
 class Comment extends React.Component {
     constructor(props) {
         super(props);
-        this.callbacks = props.callbacks;
+        this.callbacks = {
+            delete: this.deleteComment.bind(this),
+            edit: this.editComment.bind(this),
+            reply: this.replyComment.bind(this)
+        }
+    }
+
+    deleteComment() {
+        this.props.callbacks.delete(this.props.comment.id);
+    }
+
+    editComment() {
+        this.props.callbacks.edit(this.props.comment.id);
+    }
+
+    replyComment() {
+        this.props.callbacks.reply(this.props.comment.id);
     }
 
     isButtonDisabled(id, type) {
@@ -97,7 +113,6 @@ class Comment extends React.Component {
                     <ActionableButton 
                         type={edit} 
                         comment={this.props.comment}
-                        disabled={this.isButtonDisabled(this.props.comment.id, 'edit')}  
                         onClick={this.callbacks.edit} />
                 </div>
             );
@@ -109,6 +124,8 @@ class Comment extends React.Component {
                 disabled={this.isButtonDisabled(this.props.comment.id, 'reply')}
                 onClick={this.callbacks.reply} />);
     }
+
+    
 
     getContent(replyingTo) {
         let c_replyingTo;
