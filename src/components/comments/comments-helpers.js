@@ -22,16 +22,16 @@ function ProfileImage(props) {
 
 function LikabilityButton(props) {
     const handleLike = () => {
-       
+       props.likeComment(true);
     }
     const handleDislike = () => {
-   
+        props.likeComment(false);
     }
     return (
         <div className="m-likability-button">
-            <button className="m-likability-button__like" onClick={handleLike} >{Icons.plus}</button>
-            <div className="m-likability-button__value">{props.score}</div>
-            <button className="m-likability-button__dislike" onClick={handleDislike}>{Icons.minus}</button>
+            <button className="flex-center m-likability-button__like" onClick={handleLike} >{Icons.plus}</button>
+            <div className="flex-center m-likability-button__value">{props.score}</div>
+            <button className="flex-center m-likability-button__dislike" onClick={handleDislike}>{Icons.minus}</button>
         </div>
     );
 } 

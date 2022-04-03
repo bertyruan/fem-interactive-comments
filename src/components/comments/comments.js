@@ -81,7 +81,12 @@ class Comment extends React.Component {
             update: this.updateComment.bind(this),
             reply: this.replyComment.bind(this)
         }
+        this.likeComment = this.likeComment.bind(this)
         this.state = { editCommentValue: '' }
+    }
+
+    likeComment(likes) {
+        this.props.callbacks.likeComment(this.props.comment.id, likes);
     }
 
     deleteComment() {
@@ -186,7 +191,10 @@ class Comment extends React.Component {
                 />
                 {this.getContent(this.props.comment.replyingTo)}
                 <div className="m-comment--actionables l-comment--actionables">
-                    <LikabilityButton score={this.props.comment.score} />
+                    <LikabilityButton 
+                        score={this.props.comment.score} 
+                        likeComment={this.likeComment}
+                    />
                     {this.getButtons()}
                 </div>
             </CommentCard>

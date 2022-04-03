@@ -1,7 +1,7 @@
 const RelativTime = require('dayjs/plugin/relativeTime')
 const dayjs = require('dayjs');
 dayjs.extend(RelativTime);
-const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false, replyId: NaN}};
+const threadData = {content: '', user:'', like: undefined,  mode: {isEdit: false, isReply: false, replyId: NaN}};
 const parentThread = {comments: [], id: -1 }
 const rootId = -1;
 const DATE_FORMAT = 'MMMM D, YYYY H:mm:s';
@@ -75,6 +75,16 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
                     const orderedReplies = orderReplyComment(newReplies.sort(sortComment));
                     comment.replies = orderedReplies;
+                }
+            }
+            if(type === 'like' && data.like !== undefined) {
+                if(comment.id === id) {
+                    const scoreInc = data.like ? 1 : -1;
+                    comment.score += scoreInc;
+                }
+                if(replies && comment.replies.length > 0) {
+                    const newReplies = buildNewThread(type, comment.replies, id, data);
+                    comment.replies = newReplies;
                 }
             }
             if(type ==='dto') {

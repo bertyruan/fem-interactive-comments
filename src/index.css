@@ -185,40 +185,10 @@ textarea.comment-response {
   }
 }
 
-/* LIKABILITY BUTTON */
 
-.m-likability-button {
-  background-color: hsl(228, 33%, 97%);
-  color: var(--primary-color);
+/* COMPOSITIONS */
+
+.flex-center {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
-
-  width: 100px;
-  height: 40px;
-  border-radius: 10px;
-}
-
-.m-likability-button svg {
-  fill: #c5c6ef;
-}
-
-.m-likability-button svg:hover {
-  fill: var(--primary-color);
-}
-
-.m-likability-button__like {
-  background-color: inherit;
-}
-
-.m-likability-button__value {
-  background-color: inherit;
-  color: var(--primary-color);
-  font-weight: 500;
-}
-
-.m-likability-button__dislike {
-  background-color: inherit;
-  display: flex;
+  align-items: center;  
 }

@@ -14,7 +14,8 @@ class CommentThread extends React.Component {
             update: this.parentCallbacks.update,
             submitReply: this.submitReply.bind(this),
             reply: this.replyComment.bind(this),
-            updateMode: this.parentCallbacks.updateMode
+            updateMode: this.parentCallbacks.updateMode,
+            likeComment: this.parentCallbacks.likeComment
         }
     }
 

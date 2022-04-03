@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData, rootId, initComment } from './components/helpers/helpers'
+import { buildNewThread, threadData, rootId, initComment, likeComment } from './components/helpers/helpers'
 import { CommentThread} from './components/threads/threads'
 import { CreateComment } from './components/comments/comments';
 
@@ -31,7 +31,8 @@ class App extends React.Component {
             update: this.updateComment.bind(this),
             reply: this.replyComment.bind(this),
             submitReply: this.submitReply.bind(this),
-            updateMode: this.updateMode.bind(this)
+            updateMode: this.updateMode.bind(this),
+            likeComment: this.likeComment.bind(this)
         }
     }
 
@@ -121,6 +122,14 @@ class App extends React.Component {
                 comments: newComments
             }
         });
+    }
+
+    likeComment(id, likes) {
+        const data = {...threadData, like: likes}
+        this.setState(prevState => ({
+            comments: buildNewThread('like', [...prevState.comments], id, data)
+        }));
+        return true;
     }
 
     render() {
