@@ -1,4 +1,5 @@
 import { Icons, Avatars } from './../../static-images';
+import { getUserFriendlyDate } from './../helpers/helpers'
 
 function TextAreaReply(props) {
     return (
@@ -43,7 +44,7 @@ function CommentDetails(props) {
                 {props.isCurrUsers && <span className="m-comment-details__you">you</span>}
             </div>
             
-            <div className="m-comment-details__timeSpan">{props.timeSpan}</div>
+            <div className="m-comment-details__timeSpan">{getUserFriendlyDate(props.timeSpan)}</div>
         </div>
     )
 }

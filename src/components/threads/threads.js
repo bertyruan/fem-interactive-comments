@@ -20,7 +20,7 @@ class CommentThread extends React.Component {
         }
     }
 
-    replyComment(parentId, comment) {
+    replyComment(parentId) {
         if(!this.callbacks.checkMode(parentId, 'reply')) {
             this.parentCallbacks.reply(parentId, this.currentUser.username);
             this.callbacks.updateMode(parentId, 'reply');

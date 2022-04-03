@@ -1,6 +1,10 @@
+const RelativTime = require('dayjs/plugin/relativeTime')
+const dayjs = require('dayjs');
+dayjs.extend(RelativTime);
 const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false, replyId: NaN}};
 const parentThread = {comments: [], id: -1 }
 const rootId = -1;
+const DATE_FORMAT = 'MMMM D, YYYY H:mm:s';
 
 function buildNewThread(type, comments, id, data=threadData, parent=parentThread) {
     let newComments = [];
@@ -36,7 +40,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                         comment.replies.splice(0, 0, newComment);
                     }
                     else {
-                        const commentIndex = comments.indexOf((comment) => comment.id === id);
+                        const commentIndex = comments.indexOf((c) => c.id === comment.id);
                         comments.splice(commentIndex, 0, newComment);
                     }
            
@@ -56,11 +60,14 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                 }
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
-                    comment.replies = newReplies;
+                    
+                    comment.replies = newReplies.sort(sortComment);
+                    console.log(comment.replies);
                 }
             }
             if(type ==='dto') {
-                comment.mode = { isEdit: false, isReply: false };
+                comment.createdAt = jsonTextToTime(comment.createdAt);
+                comment.mode = {...threadData.mode};
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread('dto', comment.replies);
                     comment.replies = newReplies;
@@ -68,8 +75,8 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
             }
             newComments.push(comment);
         }
-       
     }
+    // console.log(newComments);
     return newComments;
 }
 
@@ -77,7 +84,7 @@ function initComment(content, username, replyingTo, mode={...threadData.mode}) {
     const comment = {
         id: Math.floor(Math.random() * 100000000),
         content: content,
-        createdAt: 'now',
+        createdAt: dayjs().format(DATE_FORMAT),
         score: 0,
         user: {
             image: {
@@ -111,4 +118,43 @@ function getParentComment(comments, id) {
     return -1;
 }
 
-export {initComment, buildNewThread, getParentComment, threadData, rootId}
+function jsonTextToTime(timeText) {
+    let time;
+    switch(timeText) {
+        case '1 month ago':
+            time = dayjs().subtract(1, 'month');
+            break;
+        case '2 weeks ago':
+            time = dayjs().subtract(2, 'weeks');
+            break;
+        case '1 week ago':
+            time = dayjs().subtract(1, 'week');
+            break;
+        case '2 days ago':
+            time = dayjs().subtract(2, 'days');
+            break;
+        default:
+    }
+    return time.format(DATE_FORMAT);
+}
+
+function getUserFriendlyDate(date) {
+    return dayjs(date, DATE_FORMAT).fromNow();
+}
+
+function sortComment(comment1, comment2) {
+    if(comment1.mode.isReply) {
+        return 0;
+    }
+
+    const date1 = dayjs(comment1.createdAt, DATE_FORMAT);
+    const date2 = dayjs(comment2.createdAt, DATE_FORMAT);
+
+    if(date1.isAfter(date2)) {
+        return 1;
+    }
+
+    return -1;
+}
+
+export {initComment, buildNewThread, getParentComment, threadData, rootId, getUserFriendlyDate}
