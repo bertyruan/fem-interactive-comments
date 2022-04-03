@@ -3,7 +3,6 @@ import './comments.css';
 import {CommentCard, CommentDetails, LikabilityButton, ProfileImage, TextAreaReply} from './comments-helpers';
 import { ButtonActionableType, ActionableButton, PostButton, ButtonPostType } from './../buttons/buttons';
 
-
 class CreateComment extends React.Component {
     static type = {
         CREATE: 'create',
@@ -55,7 +54,11 @@ class CreateComment extends React.Component {
     render() {
         return (
             <CommentCard className={`l-comment ${this.className}`}>
-                <TextAreaReply value={this.state.textareaValue} onChange={this.onChange.bind(this)} placeholder={this.placeholderText}></TextAreaReply>
+                <TextAreaReply 
+                    value={this.state.textareaValue} 
+                    onChange={this.onChange.bind(this)} 
+                    placeholder={this.placeholderText}>
+                </TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
                     <PostButton 
@@ -75,8 +78,10 @@ class Comment extends React.Component {
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
+            update: this.updateComment.bind(this),
             reply: this.replyComment.bind(this)
         }
+        this.state = { editCommentValue: '' }
     }
 
     deleteComment() {
@@ -85,6 +90,10 @@ class Comment extends React.Component {
 
     editComment() {
         this.props.callbacks.edit(this.props.comment.id);
+    }
+
+    updateComment() {
+        this.props.callbacks.update(this.props.comment.id, this.state.editCommentValue);
     }
 
     replyComment() {
@@ -125,9 +134,31 @@ class Comment extends React.Component {
                 onClick={this.callbacks.reply} />);
     }
 
-    
+    getEditButton() {
+        if(this.props.isEdit) {
+            return (
+                <PostButton 
+                    type={ButtonPostType.UPDATE} 
+                    onClick={this.callbacks.update}    
+                /> 
+            );
+        }
+    }
+
+    onEditCommentChange(event) {
+        this.setState({ editCommentValue: event.target.value });
+    }
 
     getContent(replyingTo) {
+        if(this.props.isEdit) {
+            return (
+                <TextAreaReply 
+                    value={this.state.editCommentValue} 
+                    onChange={this.onEditCommentChange.bind(this)} 
+                />
+            );
+        }
+
         let c_replyingTo;
         if(replyingTo) {
             c_replyingTo = <span className="m-comment--replying-to">{`@${replyingTo} `}</span>;
@@ -153,6 +184,7 @@ class Comment extends React.Component {
                     <LikabilityButton score={this.props.comment.score} />
                     {this.getActionableButtons(this.props.isCurrentUser)}
                 </div>
+                {this.getEditButton()}
             </CommentCard>
         );
     }

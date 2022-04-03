@@ -28,8 +28,9 @@ class App extends React.Component {
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
+            update: this.updateComment.bind(this),
             reply: this.replyComment.bind(this),
-            create: this.createComment.bind(this),
+            submitReply: this.submitReply.bind(this),
             checkMode: this.checkMode.bind(this),
             updateMode: this.updateMode.bind(this)
         }
@@ -74,11 +75,20 @@ class App extends React.Component {
         return true;
     }
   
-    editComment(id, content) {
-        const data = {...threadData, content: "blah blah black sheep"};
+    editComment(id) {
+        const data = {...threadData};
         
         this.setState(prevState => ({
             comments: buildNewThread('edit', [...prevState.comments], id, data)
+        }));        
+        return true;
+    }
+
+    updateComment(id, content) {
+        const data = {...threadData, content: content};
+        
+        this.setState(prevState => ({
+            comments: buildNewThread('update', [...prevState.comments], id, data)
         }));        
         return true;
     }
@@ -92,10 +102,10 @@ class App extends React.Component {
         return true;
     }
 
-    createComment(id, user, content) {
+    submitReply(id, user, content) {
         const data = {...threadData, user: user, content: content};
         this.setState(prevState => ({
-            comments: buildNewThread('create', [...prevState.comments], id, data)
+            comments: buildNewThread('submit-reply', [...prevState.comments], id, data)
         }));
         return true;
     }

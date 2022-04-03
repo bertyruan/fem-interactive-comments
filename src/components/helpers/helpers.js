@@ -24,13 +24,25 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
         else {
             if (type === 'edit') {
                 if(comment.id === id) {
-                    comment.content = data.content;
+                    comment.mode.isEdit = true;
                 } 
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id, data);
                     comment.replies = newReplies;
                 }
             }
+
+            if (type === 'update') {
+                if(comment.id === id) {
+                    comment.mode.isEdit = false;
+                    comment.content = data.content;
+                }
+                if(replies && comment.replies.length > 0) {
+                    const newReplies = buildNewThread(type, comment.replies, id, data);
+                    comment.replies = newReplies;
+                }
+            }
+
             if (type ==='reply') {
                 if(comment.id === id) {
                     const replyingTo = comment.user.username;
@@ -52,7 +64,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                 }
             }
             
-            if(type === 'create') {
+            if(type === 'submit-reply') {
                 if(comment.id === id) {
                     comment.content= data.content;
                     comment.createdAt = dayjs().format(DATE_FORMAT);
