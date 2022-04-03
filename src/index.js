@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData, rootId } from './components/helpers/helpers'
+import { buildNewThread, threadData, rootId, initComment } from './components/helpers/helpers'
 import { CommentThread} from './components/threads/threads'
 import { CreateComment } from './components/comments/comments';
 
@@ -94,11 +94,21 @@ class App extends React.Component {
 
     createComment(id, user, content) {
         const data = {...threadData, user: user, content: content};
- 
         this.setState(prevState => ({
             comments: buildNewThread('create', [...prevState.comments], id, data)
         }));
         return true;
+    }
+
+    addComment(user, content) {
+        const comment = initComment(content, user);
+        this.setState(prevState => {
+            const newComments = [...prevState.comments];
+            newComments.push(comment);
+            return {
+                comments: newComments
+            }
+        });
     }
 
     render() {
@@ -113,13 +123,16 @@ class App extends React.Component {
                         modes={this.state.modes}
                         parentId={rootId}
                         />
-                    <CreateComment type={CreateComment.type.CREATE} currentUser={this.state.currentUser} />
+                    <CreateComment 
+                        type={CreateComment.type.CREATE} 
+                        currentUser={this.state.currentUser} 
+                        onCreate={this.addComment.bind(this)}
+                        />
                 </main>
                 <footer>
                     <Attribution />
                     <button onClick={() => {this.editComment()}}></button>
                 </footer>
-                {/* <CreateComment type={CreateComment.type.REPLY} currentUser={this.data.comments[0].user}></CreateComment> */}
             </div>
         );
     }

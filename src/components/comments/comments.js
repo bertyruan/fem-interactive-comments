@@ -15,8 +15,10 @@ class CreateComment extends React.Component {
         this.username = props.currentUser.username;
         this.buttonType = "";
         this.className = "";
-        const state = this.setType(props.type);
-        this.state = state;
+        this.placeholderText = "";
+        this.onSubmit = () => {}
+        this.setType(props.type);
+        this.state = { textareaValue: "" };
     }
 
     onChange(event) {
@@ -24,31 +26,34 @@ class CreateComment extends React.Component {
     }
 
     setType(type) {
-        let defaultText, className, buttonType;
+        let placeholderText, className, buttonType, onSubmit;
 
         if(type === CreateComment.type.CREATE) {
-            defaultText = "Add a comment...";
+            placeholderText = "Add a comment...";
             className = "m-comment--create";
             buttonType = ButtonPostType.SEND;
+            onSubmit = () => this.props.onCreate(this.username, this.state.textareaValue);
         } 
 
         if(type === CreateComment.type.REPLY) {
             className = "m-comment--reply";
             buttonType = ButtonPostType.REPLY;
+            onSubmit = () => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue);
         }
         this.className = className;
         this.buttonType = buttonType;
-        return  {textareaValue: defaultText };
+        this.placeholderText = placeholderText;
+        this.onSubmit = onSubmit;
     }
 
     render() {
         return (
             <CommentCard className={`l-comment ${this.className}`}>
-                <TextAreaReply value={this.state.textareaValue} onChange={this.onChange.bind(this)}></TextAreaReply>
+                <TextAreaReply value={this.state.textareaValue} onChange={this.onChange.bind(this)} placeholder={this.placeholderText}></TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
                     <PostButton 
-                        onClick={() => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue)} 
+                        onClick={this.onSubmit} 
                         type={this.buttonType}
                         commentId={this.props.id}>
                     </PostButton>

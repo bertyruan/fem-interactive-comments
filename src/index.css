@@ -129,7 +129,7 @@ body {
 /* COMMENT TEXTAREA */
 
 textarea:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 textarea:focus {

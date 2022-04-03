@@ -6,7 +6,8 @@ function TextAreaReply(props) {
         <textarea 
             className="comment-response comment-text" 
             value={props.value}
-            onChange={props.onChange}>
+            onChange={props.onChange}
+            placeholder={props.placeholder}>
         </textarea>
     );
 }
