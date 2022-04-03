@@ -31,29 +31,31 @@ class App extends React.Component {
             update: this.updateComment.bind(this),
             reply: this.replyComment.bind(this),
             submitReply: this.submitReply.bind(this),
-            checkMode: this.checkMode.bind(this),
             updateMode: this.updateMode.bind(this)
         }
     }
 
-    checkMode(id, type) {
-        if(type === 'edit') {
-
-        }
-        if(type === 'reply') {
-            return this.state.modes.reply.includes(id);
-        }
-        return false;
-    }
-
     updateMode(id, type) {
         if(type === 'edit') {
-
+            this.setState(prevState => {
+                let editModes = [...prevState.modes.edit];
+                if(this.state.modes.edit.includes(id)) {
+                    editModes = editModes.filter(modeId => modeId !== id);
+                } else {
+                    editModes.push(id);
+                }
+                return {
+                    modes: {
+                        reply: prevState.modes.reply,
+                        edit: editModes
+                    }
+                }
+            })
         }
         if(type === 'reply') {
             this.setState(prevState => { 
                 let replyModes =  [...prevState.modes.reply];
-                if(this.checkMode(id, type)) {
+                if(this.state.modes.reply.includes(id)) {
                     replyModes = replyModes.filter((modeId) => modeId !== id);
                 } else {
                     replyModes =  replyModes.concat(id);

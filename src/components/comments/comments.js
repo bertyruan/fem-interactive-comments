@@ -89,10 +89,12 @@ class Comment extends React.Component {
     }
 
     editComment() {
+        this.props.callbacks.updateMode(this.props.comment.id, 'edit');
         this.props.callbacks.edit(this.props.comment.id);
     }
 
     updateComment() {
+        this.props.callbacks.updateMode(this.props.comment.id, 'edit');
         this.props.callbacks.update(this.props.comment.id, this.state.editCommentValue);
     }
 
@@ -122,6 +124,7 @@ class Comment extends React.Component {
                     <ActionableButton 
                         type={edit} 
                         comment={this.props.comment}
+                        disabled={this.isButtonDisabled(this.props.comment.id, 'edit')}
                         onClick={this.callbacks.edit} />
                 </div>
             );
@@ -134,7 +137,7 @@ class Comment extends React.Component {
                 onClick={this.callbacks.reply} />);
     }
 
-    getEditButton() {
+    getButtons() {
         if(this.props.isEdit) {
             return (
                 <PostButton 
@@ -143,6 +146,8 @@ class Comment extends React.Component {
                 /> 
             );
         }
+
+        return this.getActionableButtons(this.props.isCurrentUser);
     }
 
     onEditCommentChange(event) {
@@ -182,9 +187,8 @@ class Comment extends React.Component {
                 {this.getContent(this.props.comment.replyingTo)}
                 <div className="m-comment--actionables l-comment--actionables">
                     <LikabilityButton score={this.props.comment.score} />
-                    {this.getActionableButtons(this.props.isCurrentUser)}
+                    {this.getButtons()}
                 </div>
-                {this.getEditButton()}
             </CommentCard>
         );
     }

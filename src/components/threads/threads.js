@@ -14,13 +14,12 @@ class CommentThread extends React.Component {
             update: this.parentCallbacks.update,
             submitReply: this.submitReply.bind(this),
             reply: this.replyComment.bind(this),
-            checkMode: this.parentCallbacks.checkMode,
             updateMode: this.parentCallbacks.updateMode
         }
     }
 
     replyComment(parentId) {
-        if(!this.callbacks.checkMode(parentId, 'reply')) {
+        if(!this.props.modes.reply.includes(parentId)) {
             this.parentCallbacks.reply(parentId, this.currentUser.username);
             this.callbacks.updateMode(parentId, 'reply');
             return true;
