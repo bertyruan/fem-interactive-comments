@@ -93,7 +93,7 @@ class App extends React.Component {
     }
 
     createComment(id, user, content) {
-        const data = {...threadData, data:{user: user, content: content}};
+        const data = {...threadData, user: user, content: content};
  
         this.setState(prevState => ({
             comments: buildNewThread('create', [...prevState.comments], id, data)

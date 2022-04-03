@@ -20,7 +20,7 @@ class CommentThread extends React.Component {
         }
     }
 
-    replyComment(parentId) {
+    replyComment(parentId, comment) {
         if(!this.callbacks.checkMode(parentId, 'reply')) {
             this.parentCallbacks.reply(parentId, this.currentUser.username);
             this.callbacks.updateMode(parentId, 'reply');
@@ -29,10 +29,9 @@ class CommentThread extends React.Component {
         return false;
     }
 
-    createComment(id, username, content) {
-        this.callbacks.updateMode(this.props.parentId, 'reply');
+    createComment(id, parentId, username, content) {
+        this.callbacks.updateMode(parentId, 'reply');
         this.parentCallbacks.create(id, username, content);
-        console.log(arguments, this.props.modes, this.props.parentId);
     }
 
     renderComment(comment, currCommentIsUsers, isReply=false) {
@@ -41,6 +40,7 @@ class CommentThread extends React.Component {
                         key={comment.id} 
                         onReply={this.callbacks.create} 
                         id={comment.id} 
+                        replyId={comment.mode.replyId}
                         currentUser={this.currentUser} 
                         type={CreateComment.type.REPLY}>
                     </CreateComment>

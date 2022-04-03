@@ -1,4 +1,4 @@
-const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false}};
+const threadData = {content: '', user:'',  mode: {isEdit: false, isReply: false, replyId: NaN}};
 const parentThread = {comments: [], id: -1 }
 const rootId = -1;
 
@@ -30,7 +30,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
             if (type ==='reply') {
                 if(comment.id === id) {
                     const replyingTo = comment.user.username;
-                    const mode = {...threadData.mode, isReply: true};
+                    const mode = {...threadData.mode, isReply: true, replyId: comment.id};
                     const newComment = initComment('', data.user, replyingTo, mode);
                     if(replies) {
                         comment.replies.splice(0, 0, newComment);
@@ -52,7 +52,7 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                 if(comment.id === id) {
                     comment.content= data.content;
                     comment.mode.isReply = false;
-           
+                    comment.mode.replyId = NaN;
                 }
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);

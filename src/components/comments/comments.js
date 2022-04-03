@@ -48,7 +48,7 @@ class CreateComment extends React.Component {
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
                     <PostButton 
-                        onClick={() => this.props.onReply(this.props.id, this.username, this.state.textareaValue)} 
+                        onClick={() => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue)} 
                         type={this.buttonType}
                         commentId={this.props.id}>
                     </PostButton>
