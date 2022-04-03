@@ -16,7 +16,7 @@ class CreateComment extends React.Component {
         this.buttonType = "";
         this.className = "";
         this.placeholderText = "";
-        this.onSubmit = () => {}
+        this.submitCallback = () => {}
         this.setType(props.type);
         this.state = { textareaValue: "" };
     }
@@ -26,25 +26,31 @@ class CreateComment extends React.Component {
     }
 
     setType(type) {
-        let placeholderText, className, buttonType, onSubmit;
+        let placeholderText, className, buttonType, submitCallback;
 
         if(type === CreateComment.type.CREATE) {
             placeholderText = "Add a comment...";
             className = "m-comment--create";
             buttonType = ButtonPostType.SEND;
-            onSubmit = () => this.props.onCreate(this.username, this.state.textareaValue);
+            submitCallback = () => this.props.onCreate(this.username, this.state.textareaValue);
         } 
 
         if(type === CreateComment.type.REPLY) {
             className = "m-comment--reply";
             buttonType = ButtonPostType.REPLY;
-            onSubmit = () => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue);
+            submitCallback = () => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue);
         }
         this.className = className;
         this.buttonType = buttonType;
         this.placeholderText = placeholderText;
-        this.onSubmit = onSubmit;
+        this.submitCallback = submitCallback;
     }
+
+    onSubmit() {
+        this.submitCallback();
+        this.setState({textareaValue: ""});
+    }
+    
 
     render() {
         return (
@@ -53,7 +59,7 @@ class CreateComment extends React.Component {
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
                     <PostButton 
-                        onClick={this.onSubmit} 
+                        onClick={this.onSubmit.bind(this)} 
                         type={this.buttonType}
                         commentId={this.props.id}>
                     </PostButton>

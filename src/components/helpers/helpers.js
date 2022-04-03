@@ -43,26 +43,26 @@ function buildNewThread(type, comments, id, data=threadData, parent=parentThread
                         const commentIndex = comments.indexOf((c) => c.id === comment.id);
                         comments.splice(commentIndex, 0, newComment);
                     }
-           
                 }
                 if(replies && comment.replies.length > 0) {
                     const parentThread = {comments: comments, id: comment.id};
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
-                    comment.replies = newReplies;
+                    comment.replies = orderReplyComment(newReplies);
+                    console.log(comment.replies);
                 }
             }
             
             if(type === 'create') {
                 if(comment.id === id) {
                     comment.content= data.content;
+                    comment.createdAt = dayjs().format(DATE_FORMAT);
                     comment.mode.isReply = false;
                     comment.mode.replyId = NaN;
                 }
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id, data, parentThread);
-                    
-                    comment.replies = newReplies.sort(sortComment);
-                    console.log(comment.replies);
+                    const orderedReplies = orderReplyComment(newReplies.sort(sortComment));
+                    comment.replies = orderedReplies;
                 }
             }
             if(type ==='dto') {
@@ -155,6 +155,28 @@ function sortComment(comment1, comment2) {
     }
 
     return -1;
+}
+
+function orderReplyComment(_comments) {
+    const comments = [..._comments];
+    const replyIndexes = comments.reduce((areReplies, comment, index) => {
+        if(comment.mode.isReply) {
+            areReplies.push(index);
+        }
+        return areReplies;
+    }, []);
+    // console.log(comments, replyIndexes);
+    for(let i = 0; i < replyIndexes.length; i++) {
+        const index = replyIndexes[i];
+        const reply = comments.splice(index, 1)[0];
+        const parentIndex = comments.findIndex((comment) => comment.id === reply.mode.replyId );
+        if(parentIndex === -1) {
+            comments.splice(0, 0, reply);
+        } else {
+            comments.splice(parentIndex + 1, 0, reply);
+        }
+    }
+    return comments;
 }
 
 export {initComment, buildNewThread, getParentComment, threadData, rootId, getUserFriendlyDate}
