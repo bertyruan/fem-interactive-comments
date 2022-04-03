@@ -29,9 +29,10 @@ class Button extends React.Component {
 
     render() {
         // console.log(this.props.commentId);
+        // console.log(this.props.disabled);
         return (
             <button 
-                disabled={this.props.disabled()} 
+                disabled={this.props.disabled} 
                 onClick={() => this.props.onClick(this.props.commentId)} 
                 className={this.props.className}>
                     {this.props.children}

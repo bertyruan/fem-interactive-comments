@@ -2,7 +2,11 @@ import { Icons, Avatars } from './../../static-images';
 
 function TextAreaReply(props) {
     return (
-        <textarea className="comment-response comment-text" value={props.value}></textarea>
+        <textarea 
+            className="comment-response comment-text" 
+            value={props.value}
+            onChange={props.onChange}>
+        </textarea>
     );
 }
 

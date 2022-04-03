@@ -51,15 +51,15 @@ class App extends React.Component {
         }
         if(type === 'reply') {
             this.setState(prevState => { 
-                let modes =  [...prevState.modes.reply];
+                let replyModes =  [...prevState.modes.reply];
                 if(this.checkMode(id, type)) {
-                    modes = modes.filter((modeId) => modeId !== id);
+                    replyModes = replyModes.filter((modeId) => modeId !== id);
                 } else {
-                    modes =  modes.concat(id);
+                    replyModes =  replyModes.concat(id);
                 }
                 return {
                     modes: {
-                        reply: modes,
+                        reply: replyModes,
                         edit: prevState.modes.edit
                     }
                 }
@@ -104,11 +104,13 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                {this.state.test}
                 <main className="container">
                     <CommentThread 
                         currentUser={this.state.currentUser} 
                         comments={this.state.comments}
                         callbacks={this.callbacks}
+                        modes={this.state.modes}
                         parentId={rootId}
                         />
                     <CreateComment type={CreateComment.type.CREATE} currentUser={this.state.currentUser} />

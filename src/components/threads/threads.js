@@ -6,7 +6,6 @@ import './thread.css';
 class CommentThread extends React.Component {
     constructor(props) {
         super(props);
-        this.id = Math.floor(Math.random() * 10);
         //this.props.comments
         this.currentUser = this.props.currentUser;
         this.parentCallbacks = this.props.callbacks;
@@ -21,22 +20,19 @@ class CommentThread extends React.Component {
         }
     }
 
-    isRoot(id) {
-        return id === rootId;
-    }
-
     replyComment(parentId) {
         if(!this.callbacks.checkMode(parentId, 'reply')) {
-            const childId = this.parentCallbacks.reply(parentId, this.currentUser.username);
-            this.callbacks.updateMode([parentId, childId], 'reply');
+            this.parentCallbacks.reply(parentId, this.currentUser.username);
+            this.callbacks.updateMode(parentId, 'reply');
             return true;
         }
         return false;
     }
 
     createComment(id, username, content) {
-        this.callbacks.updateMode(this.props.comments.modes.replyId, 'reply');
+        this.callbacks.updateMode(this.props.parentId, 'reply');
         this.parentCallbacks.create(id, username, content);
+        console.log(arguments, this.props.modes, this.props.parentId);
     }
 
     renderComment(comment, currCommentIsUsers, isReply=false) {
@@ -52,9 +48,10 @@ class CommentThread extends React.Component {
         // if(this.state.isInEditMode.includes(comment.id))
         return <Comment 
                     key={comment.id} 
-                    isUsers={currCommentIsUsers} 
+                    isCurrentUser={currCommentIsUsers} 
                     comment={comment} 
                     callbacks={this.callbacks} 
+                    modes={this.props.modes}
                 />;
     }
 
@@ -67,6 +64,7 @@ class CommentThread extends React.Component {
                 currentUser={this.currentUser} 
                 callbacks={this.props.callbacks} 
                 parentId={comment.id}
+                modes={this.props.modes}
             />;
         </ResponseThread>);
     }
@@ -101,7 +99,6 @@ function ResponseThread(props) {
         <div className="l-reply">
             <div className="l-reply--vertical-dividor"></div>
             {props.children}
-            {/* <CommentThread className="m-comment-thread--response" comments={replies} currentUser={currentUser} callbacks={callbacks}></CommentThread> */}
         </div>
     );
 }

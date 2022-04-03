@@ -13,34 +13,44 @@ class CreateComment extends React.Component {
     constructor(props) {
         super(props);
         this.username = props.currentUser.username;
-        this.defaultText = "";
         this.buttonType = "";
         this.className = "";
-        this.setType(props.type);
+        const state = this.setType(props.type);
+        this.state = state;
+    }
+
+    onChange(event) {
+        this.setState({textareaValue: event.target.value});
     }
 
     setType(type) {
+        let defaultText, className, buttonType;
+
         if(type === CreateComment.type.CREATE) {
-            this.defaultText = "Add a comment...";
-            this.className = "m-comment--create";
-            this.buttonType = ButtonPostType.SEND;
-        } else {
-            this.className = "m-comment--reply";
-            this.buttonType = ButtonPostType.REPLY;
+            defaultText = "Add a comment...";
+            className = "m-comment--create";
+            buttonType = ButtonPostType.SEND;
+        } 
+
+        if(type === CreateComment.type.REPLY) {
+            className = "m-comment--reply";
+            buttonType = ButtonPostType.REPLY;
         }
+        this.className = className;
+        this.buttonType = buttonType;
+        return  {textareaValue: defaultText };
     }
 
     render() {
         return (
             <CommentCard className={`l-comment ${this.className}`}>
-                <TextAreaReply value={this.defaultText}></TextAreaReply>
+                <TextAreaReply value={this.state.textareaValue} onChange={this.onChange.bind(this)}></TextAreaReply>
                 <div className="l-create-comment">
                     <ProfileImage className="l-create-comment__image" imageName={this.username}></ProfileImage>
                     <PostButton 
-                        onClick={() => this.props.onReply(this.props.id, this.username, 'content')} 
+                        onClick={() => this.props.onReply(this.props.id, this.username, this.state.textareaValue)} 
                         type={this.buttonType}
-                        commentId={this.props.id}
-                        disabled={() => {}}>
+                        commentId={this.props.id}>
                     </PostButton>
                 </div>
             </CommentCard>
@@ -51,9 +61,16 @@ class CreateComment extends React.Component {
 class Comment extends React.Component {
     constructor(props) {
         super(props);
-        this.comment = props.comment;
-        this.isCurrUsers = props.isUsers;
         this.callbacks = props.callbacks;
+    }
+
+    isButtonDisabled(id, type) {
+        if(type === 'reply') {
+            return this.props.modes.reply.includes(id);
+        }
+        if(type === "edit") {
+            return this.props.modes.edit.includes(id);
+        }
     }
     
     getActionableButtons(isCurrUsers) {
@@ -64,13 +81,12 @@ class Comment extends React.Component {
                 <div className="l-comment--actionables">
                     <ActionableButton 
                         type={del} 
-                        comment={this.comment} 
-                        disabled={() => {}}
+                        comment={this.props.comment}
                         onClick={this.callbacks.delete}/>
                     <ActionableButton 
                         type={edit} 
-                        comment={this.comment}
-                        disabled={() => {}}  
+                        comment={this.props.comment}
+                        disabled={this.isButtonDisabled(this.props.comment.id, 'edit')}  
                         onClick={this.callbacks.edit} />
                 </div>
             );
@@ -78,8 +94,8 @@ class Comment extends React.Component {
         return (
             <ActionableButton 
                 type={ButtonActionableType.REPLY} 
-                comment={this.comment} 
-                disabled={() => this.callbacks.checkMode(this.comment.id, 'reply')}
+                comment={this.props.comment} 
+                disabled={this.isButtonDisabled(this.props.comment.id, 'reply')}
                 onClick={this.callbacks.reply} />);
     }
 
@@ -91,7 +107,7 @@ class Comment extends React.Component {
         return (
             <div className="comment-text l-comment--text">
                 {c_replyingTo && c_replyingTo}
-                { this.comment.content }
+                { this.props.comment.content }
             </div>
         )
     }
@@ -100,14 +116,14 @@ class Comment extends React.Component {
         return (
             <CommentCard className='l-comment'>
                 <CommentDetails 
-                    username={this.comment.user.username} 
-                    isCurrUsers={this.isCurrUsers} 
-                    timeSpan={this.comment.createdAt} 
+                    username={this.props.comment.user.username} 
+                    isCurrUsers={this.props.isCurrentUser} 
+                    timeSpan={this.props.comment.createdAt} 
                 />
-                {this.getContent(this.comment.replyingTo)}
+                {this.getContent(this.props.comment.replyingTo)}
                 <div className="m-comment--actionables l-comment--actionables">
-                    <LikabilityButton score={this.comment.score} />
-                    {this.getActionableButtons(this.isCurrUsers)}
+                    <LikabilityButton score={this.props.comment.score} />
+                    {this.getActionableButtons(this.props.isCurrentUser)}
                 </div>
             </CommentCard>
         );
