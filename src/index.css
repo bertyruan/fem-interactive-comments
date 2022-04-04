@@ -7,6 +7,7 @@
 :root {
   --primary-color: hsla(238, 40%, 52%, 1);
   --warn-color: hsla(358, 79%, 66%, 1);
+  --warn-color-light: hsl(357, 100%, 86%);
   --bg-color: hsla(228, 33%, 97%, 1);
   --font-color: hsla(211, 10%, 45%, 1);
   --bold-font: hsla(212, 24%, 26%, 1);
@@ -200,4 +201,12 @@ textarea.comment-response {
 .flex-center {
   display: flex;
   align-items: center;  
+}
+
+.stack > * + * {
+  margin-top: var(--stack-gap, 1em);
+}
+
+.file > * + * {
+  margin-left: var(--file-gap, 1em);
 }

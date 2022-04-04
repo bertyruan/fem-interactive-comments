@@ -25,7 +25,7 @@ class App extends React.Component {
         }
 
         this.callbacks = {
-            delete: this.confirmDelete.bind(this),
+            delete: this.promptDelete.bind(this),
             edit: this.editComment.bind(this),
             submitEdit: this.submitEdit.bind(this),
             reply: this.replyComment.bind(this),
@@ -35,14 +35,20 @@ class App extends React.Component {
         }
     }
 
-    confirmDelete(id) {
+    promptDelete(id) {
         this.setState({deleteModal: {show: true, id: id}});
     }
+
+    cancelDelete() {
+        this.setState({deleteModal: {show: false, id: NaN}});
+    }
     
-    deleteComment(id) {
+    deleteComment() {
+        const id = this.state.deleteModal.id;
         this.setState(prevState => ({
             comments: buildNewThread(states.DELETE, [...prevState.comments], id)
         }));
+        this.cancelDelete();
         return true;
     }
   
@@ -119,8 +125,6 @@ class App extends React.Component {
         });
     }
 
-
-    //does this work?
     get modalStyle() {
         return this.state.deleteModal.show && 'no-overflow';
     }
@@ -146,8 +150,11 @@ class App extends React.Component {
                     <Attribution />
                     <button onClick={() => {this.editComment()}}></button>
                 </footer>
-
-                {this.state.deleteModal.show && <ConfirmDeletePopup></ConfirmDeletePopup>}
+                <ConfirmDeletePopup
+                    show={this.state.deleteModal.show}
+                    cancel={this.cancelDelete.bind(this)}
+                    delete={this.deleteComment.bind(this)}
+                />
             </div>
         );
     }
@@ -157,6 +164,3 @@ ReactDOM.render(
     <App />,
     document.getElementById('root')
 );
-
-//componentDidMount() {}
-//componentWillUnmount() {}

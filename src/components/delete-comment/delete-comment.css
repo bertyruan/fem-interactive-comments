@@ -1,0 +1,37 @@
+.m-delete {
+    height: 250px;
+    max-width: 400px;
+    border-radius: 8px;
+    padding: 32px;
+    background-color: white;
+}
+
+.delete-title {
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: var(--bold-font);
+}
+
+.delete-desc {
+    line-height: 1.5;
+}
+
+.delete-cta {
+    --file-gap: 16px;
+}
+
+.button-confirm {
+    background-color: var(--warn-color);
+}
+
+.button-confirm:hover {
+    background-color: var(--warn-color-light);
+}
+
+.button-cancel {
+    background-color: var(--font-color);
+}
+
+.button-cancel:hover {
+    background-color: #a1aab4;
+}

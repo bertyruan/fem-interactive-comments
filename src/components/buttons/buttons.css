@@ -40,8 +40,8 @@ button.button__actionable:hover,
 
 button.button__actionable--delete:hover,
 .button__actionable--delete:disabled {
-  color: #ffb8bb;
-  fill: #ffb8bb;
+  color: var(--warn-color-light);
+  fill: var(--warn-color-light);
 }
 
 .button__actionable--icon > svg {

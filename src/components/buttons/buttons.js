@@ -14,28 +14,15 @@ const ButtonActionableType = {
     REPLY: 'reply'
 }
 
-class Button extends React.Component {
-    render() {
-        return (
-            <button 
-                disabled={this.props.disabled} 
-                onClick={() => this.props.onClick()}
-                className={this.props.className}>
-                    {this.props.children}
-            </button>
-        );
-    }
-}
-
 //send, update, reply
 function PostButton(props) {
     return (
-        <Button 
+        <button 
             disabled={props.disabled} 
             onClick={props.onClick} 
             className="button__post">
                 {props.type}
-        </Button>
+        </button>
     );
 }
 
@@ -43,14 +30,14 @@ function ActionableButton(props) {
     const icon = Icons[props.type];
     const deleteCSS = props.type === ButtonActionableType.DELETE ? 'button__actionable--delete' : undefined;
     return (
-        <Button 
+        <button 
             disabled={props.disabled} 
             onClick={props.onClick} 
             className={`button__actionable ${deleteCSS}`}>
                 <span className='button__actionable--icon'>{icon}</span>
                 <span>{props.type}</span>
-        </Button>
+        </button>
     );
 }
 
-export { ButtonPostType, ButtonActionableType, PostButton, ActionableButton, Button};
+export { ButtonPostType, ButtonActionableType, PostButton, ActionableButton};
