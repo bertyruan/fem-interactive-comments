@@ -2,10 +2,19 @@ const RelativTime = require('dayjs/plugin/relativeTime')
 const dayjs = require('dayjs');
 dayjs.extend(RelativTime);
 
-
-const threadData = {content: '', user:'', like: undefined,  mode: {isEdit: false, isReply: false, replyId: NaN}};
 const rootId = -1;
+const threadData = {content: '', user:'', like: undefined,  mode: {isEdit: false, isReply: false, replyId: NaN}};
 const DATE_FORMAT = 'MMMM D, YYYY H:mm:s';
+
+const states = {
+    DELETE: 'delete',
+    EDIT: 'edit',
+    SUBMIT_EDIT: 'submit-edit',
+    REPLY: 'reply',
+    SUBMIT_REPLY: 'submit-reply',
+    LIKE: 'like',
+    DTO: 'dto'
+}
 
 function buildNewThread(type, comments, id, data=threadData) {
     let newComments = [];
@@ -13,7 +22,7 @@ function buildNewThread(type, comments, id, data=threadData) {
         const comment = comments[i];
         const replies = comment.replies;
 
-        if(type === 'delete') {
+        if(type === states.DELETE) {
             if(comment.id !== id) {
                 if(replies && comment.replies.length > 0) {
                     const newReplies = buildNewThread(type, comment.replies, id);
@@ -23,7 +32,7 @@ function buildNewThread(type, comments, id, data=threadData) {
             }   
         } 
         else {
-            if (type === 'edit') {
+            if (type === states.EDIT) {
                 if(comment.id === id) {
                     comment.mode.isEdit = true;
                 } 
@@ -33,7 +42,7 @@ function buildNewThread(type, comments, id, data=threadData) {
                 }
             }
 
-            if (type === 'update') {
+            if (type === states.SUBMIT_EDIT) {
                 if(comment.id === id) {
                     comment.mode.isEdit = false;
                     comment.content = data.content;
@@ -44,7 +53,7 @@ function buildNewThread(type, comments, id, data=threadData) {
                 }
             }
 
-            if (type ==='reply') {
+            if (type === states.REPLY) {
                 if(comment.id === id) {
                     const replyingTo = comment.user.username;
                     const mode = {...threadData.mode, isReply: true, replyId: comment.id};
@@ -63,7 +72,7 @@ function buildNewThread(type, comments, id, data=threadData) {
                 }
             }
             
-            if(type === 'submit-reply') {
+            if(type === states.SUBMIT_REPLY) {
                 if(comment.id === id) {
                     comment.content= data.content;
                     comment.createdAt = dayjs().format(DATE_FORMAT);
@@ -76,7 +85,7 @@ function buildNewThread(type, comments, id, data=threadData) {
                     comment.replies = orderedReplies;
                 }
             }
-            if(type === 'like' && data.like !== undefined) {
+            if(type === states.LIKE && data.like !== undefined) {
                 if(comment.id === id) {
                     const scoreInc = data.like ? 1 : -1;
                     comment.score += scoreInc;
@@ -86,7 +95,7 @@ function buildNewThread(type, comments, id, data=threadData) {
                     comment.replies = newReplies;
                 }
             }
-            if(type ==='dto') {
+            if(type === states.DTO) {
                 comment.createdAt = jsonTextToTime(comment.createdAt);
                 comment.mode = {...threadData.mode};
                 if(replies && comment.replies.length > 0) {
@@ -199,4 +208,4 @@ function orderReplyComment(_comments) {
     return comments;
 }
 
-export {initComment, buildNewThread, getParentComment, threadData, rootId, getUserFriendlyDate}
+export {initComment, buildNewThread, getParentComment, getUserFriendlyDate, threadData, rootId, states }

@@ -3,7 +3,7 @@ import './comments.css';
 import {CommentCard, CommentDetails, LikabilityButton, ProfileImage, TextAreaReply} from './comments-helpers';
 import { ButtonActionableType, ActionableButton, PostButton, ButtonPostType } from './../buttons/buttons';
 
-class CreateComment extends React.Component {
+class DraftComment extends React.Component {
     static type = {
         CREATE: 'create',
         REPLY: 'reply' 
@@ -27,14 +27,14 @@ class CreateComment extends React.Component {
     setType(type) {
         let placeholderText, className, buttonType, submitCallback;
 
-        if(type === CreateComment.type.CREATE) {
+        if(type === DraftComment.type.CREATE) {
             placeholderText = "Add a comment...";
             className = "m-comment--create";
             buttonType = ButtonPostType.SEND;
             submitCallback = () => this.props.onCreate(this.username, this.state.textareaValue);
         } 
 
-        if(type === CreateComment.type.REPLY) {
+        if(type === DraftComment.type.REPLY) {
             className = "m-comment--reply";
             buttonType = ButtonPostType.REPLY;
             submitCallback = () => this.props.onReply(this.props.id, this.props.replyId, this.username, this.state.textareaValue);
@@ -78,7 +78,7 @@ class Comment extends React.Component {
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
-            update: this.updateComment.bind(this),
+            submitEdit: this.submitEdit.bind(this),
             reply: this.replyComment.bind(this)
         }
         this.likeComment = this.likeComment.bind(this)
@@ -98,9 +98,9 @@ class Comment extends React.Component {
         this.props.callbacks.edit(this.props.comment.id);
     }
 
-    updateComment() {
+    submitEdit() {
         this.props.callbacks.updateMode(this.props.comment.id, 'edit');
-        this.props.callbacks.update(this.props.comment.id, this.state.editCommentValue);
+        this.props.callbacks.submitEdit(this.props.comment.id, this.state.editCommentValue);
     }
 
     replyComment() {
@@ -147,7 +147,7 @@ class Comment extends React.Component {
             return (
                 <PostButton 
                     type={ButtonPostType.UPDATE} 
-                    onClick={this.callbacks.update}    
+                    onClick={this.callbacks.submitEdit}    
                 /> 
             );
         }
@@ -202,4 +202,4 @@ class Comment extends React.Component {
     }
 }
 
-export {Comment, CreateComment}
+export {Comment, DraftComment}

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData, rootId, initComment } from './components/shared/helpers'
+import { buildNewThread, threadData, rootId, initComment, states } from './components/shared/helpers'
 import { CommentThread} from './components/threads/threads'
-import { CreateComment } from './components/comments/comments';
+import { DraftComment } from './components/comments/comments';
 
 class App extends React.Component {
     constructor(props) {
@@ -21,7 +21,7 @@ class App extends React.Component {
         this.callbacks = {
             delete: this.deleteComment.bind(this),
             edit: this.editComment.bind(this),
-            update: this.updateComment.bind(this),
+            submitEdit: this.submitEdit.bind(this),
             reply: this.replyComment.bind(this),
             submitReply: this.submitReply.bind(this),
             updateMode: this.updateMode.bind(this),
@@ -30,7 +30,7 @@ class App extends React.Component {
     }
 
     updateMode(id, type) {
-        if(type === 'edit') {
+        if(type === states.EDIT) {
             this.setState(prevState => {
                 let editModes = [...prevState.modes.edit];
                 if(this.state.modes.edit.includes(id)) {
@@ -46,7 +46,7 @@ class App extends React.Component {
                 }
             })
         }
-        if(type === 'reply') {
+        if(type === states.REPLY) {
             this.setState(prevState => { 
                 let replyModes =  [...prevState.modes.reply];
                 if(this.state.modes.reply.includes(id)) {
@@ -66,7 +66,7 @@ class App extends React.Component {
     
     deleteComment(id) {
         this.setState(prevState => ({
-            comments: buildNewThread('delete', [...prevState.comments], id)
+            comments: buildNewThread(states.DELETE, [...prevState.comments], id)
         }));
         return true;
     }
@@ -75,16 +75,16 @@ class App extends React.Component {
         const data = {...threadData};
         
         this.setState(prevState => ({
-            comments: buildNewThread('edit', [...prevState.comments], id, data)
+            comments: buildNewThread(states.EDIT, [...prevState.comments], id, data)
         }));        
         return true;
     }
 
-    updateComment(id, content) {
+    submitEdit(id, content) {
         const data = {...threadData, content: content};
         
         this.setState(prevState => ({
-            comments: buildNewThread('update', [...prevState.comments], id, data)
+            comments: buildNewThread(states.SUBMIT_EDIT, [...prevState.comments], id, data)
         }));        
         return true;
     }
@@ -93,7 +93,7 @@ class App extends React.Component {
         const data = {...threadData, user: user};
 
         this.setState(prevState => ({
-            comments: buildNewThread('reply', [...prevState.comments], id, data)
+            comments: buildNewThread(states.REPLY, [...prevState.comments], id, data)
         }));  
         return true;
     }
@@ -101,7 +101,15 @@ class App extends React.Component {
     submitReply(id, user, content) {
         const data = {...threadData, user: user, content: content};
         this.setState(prevState => ({
-            comments: buildNewThread('submit-reply', [...prevState.comments], id, data)
+            comments: buildNewThread(states.SUBMIT_REPLY, [...prevState.comments], id, data)
+        }));
+        return true;
+    }
+
+    likeComment(id, likes) {
+        const data = {...threadData, like: likes}
+        this.setState(prevState => ({
+            comments: buildNewThread(states.LIKE, [...prevState.comments], id, data)
         }));
         return true;
     }
@@ -117,14 +125,6 @@ class App extends React.Component {
         });
     }
 
-    likeComment(id, likes) {
-        const data = {...threadData, like: likes}
-        this.setState(prevState => ({
-            comments: buildNewThread('like', [...prevState.comments], id, data)
-        }));
-        return true;
-    }
-
     render() {
         return (
             <div>
@@ -136,8 +136,8 @@ class App extends React.Component {
                         modes={this.state.modes}
                         parentId={rootId}
                         />
-                    <CreateComment 
-                        type={CreateComment.type.CREATE} 
+                    <DraftComment 
+                        type={DraftComment.type.CREATE} 
                         currentUser={this.state.currentUser} 
                         onCreate={this.addComment.bind(this)}
                         />

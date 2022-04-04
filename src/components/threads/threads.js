@@ -1,5 +1,6 @@
 import React from 'react';
-import {CreateComment, Comment} from './../comments/comments';
+import { states } from './../shared/helpers';
+import {DraftComment, Comment} from './../comments/comments';
 import './thread.css';
 
 class CommentThread extends React.Component {
@@ -11,9 +12,9 @@ class CommentThread extends React.Component {
         this.callbacks = {
             delete: this.parentCallbacks.delete,
             edit: this.parentCallbacks.edit,
-            update: this.parentCallbacks.update,
-            submitReply: this.submitReply.bind(this),
+            submitEdit: this.parentCallbacks.submitEdit,
             reply: this.replyComment.bind(this),
+            submitReply: this.submitReply.bind(this),
             updateMode: this.parentCallbacks.updateMode,
             likeComment: this.parentCallbacks.likeComment
         }
@@ -22,27 +23,27 @@ class CommentThread extends React.Component {
     replyComment(parentId) {
         if(!this.props.modes.reply.includes(parentId)) {
             this.parentCallbacks.reply(parentId, this.currentUser.username);
-            this.callbacks.updateMode(parentId, 'reply');
+            this.callbacks.updateMode(parentId, states.REPLY);
             return true;
         }
         return false;
     }
 
     submitReply(id, parentId, username, content) {
-        this.callbacks.updateMode(parentId, 'reply');
+        this.callbacks.updateMode(parentId, states.REPLY);
         this.parentCallbacks.submitReply(id, username, content);
     }
 
     renderComment(comment, currCommentIsUsers, state = {isReply: false, isEdit: false}) {
         if(state.isReply) {
-            return <CreateComment 
+            return <DraftComment 
                         key={comment.id} 
                         onReply={this.callbacks.submitReply} 
                         id={comment.id} 
                         replyId={comment.mode.replyId}
                         currentUser={this.currentUser} 
-                        type={CreateComment.type.REPLY}>
-                    </CreateComment>
+                        type={DraftComment.type.REPLY}>
+                    </DraftComment>
         }
 
         return <Comment 
