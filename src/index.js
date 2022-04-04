@@ -3,16 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData, rootId, initComment, likeComment } from './components/helpers/helpers'
+import { buildNewThread, threadData, rootId, initComment } from './components/shared/helpers'
 import { CommentThread} from './components/threads/threads'
 import { CreateComment } from './components/comments/comments';
-
-const CommentStates = {
-    DEFAULT: 'default',
-    EDIT: 'edit',
-    REPLY: 'reply',
-    CREATE: 'create'
-}
 
 class App extends React.Component {
     constructor(props) {
@@ -135,7 +128,6 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                {this.state.test}
                 <main className="container">
                     <CommentThread 
                         currentUser={this.state.currentUser} 
