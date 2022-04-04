@@ -1,5 +1,5 @@
 import './buttons.css';
-import {Icons} from '../../static-images';
+import {Icons} from '../shared/static-images';
 import React from 'react';
 
 const ButtonPostType = {

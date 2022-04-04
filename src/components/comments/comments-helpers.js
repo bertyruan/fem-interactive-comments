@@ -1,4 +1,4 @@
-import { Icons, Avatars } from './../../static-images';
+import { Icons, Avatars } from '../shared/static-images';
 import { getUserFriendlyDate } from './../shared/helpers'
 
 function TextAreaReply(props) {
