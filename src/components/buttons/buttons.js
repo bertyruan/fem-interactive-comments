@@ -53,4 +53,4 @@ function ActionableButton(props) {
     );
 }
 
-export { ButtonPostType, ButtonActionableType, PostButton, ActionableButton};
+export { ButtonPostType, ButtonActionableType, PostButton, ActionableButton, Button};

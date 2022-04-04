@@ -1,7 +1,9 @@
-function PopupModal() {
+import './popup-modal.css';
+
+function PopupModal(props) {
     return (
         <section className="l-popup">
-            {this.props.children}
+            {props.children}
         </section>
     );
 }

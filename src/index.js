@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Data from './assets/data/data.json'; 
 import { Attribution } from './components/attribution/attribution';
-import { buildNewThread, threadData, rootId, initComment, states } from './components/shared/helpers'
+import { buildNewThread, threadData, rootId, initComment, states, toggleMode } from './components/shared/helpers'
 import { CommentThread} from './components/threads/threads'
 import { DraftComment } from './components/comments/comments';
+import { ConfirmDeletePopup } from './components/delete-comment/delete-comment';
 
 class App extends React.Component {
     constructor(props) {
@@ -16,10 +17,15 @@ class App extends React.Component {
             modes: {
                 edit: [],
                 reply: []
+            },
+            deleteModal: {
+                show: false,
+                id: NaN
             }
         }
+
         this.callbacks = {
-            delete: this.deleteComment.bind(this),
+            delete: this.confirmDelete.bind(this),
             edit: this.editComment.bind(this),
             submitEdit: this.submitEdit.bind(this),
             reply: this.replyComment.bind(this),
@@ -29,39 +35,8 @@ class App extends React.Component {
         }
     }
 
-    updateMode(id, type) {
-        if(type === states.EDIT) {
-            this.setState(prevState => {
-                let editModes = [...prevState.modes.edit];
-                if(this.state.modes.edit.includes(id)) {
-                    editModes = editModes.filter(modeId => modeId !== id);
-                } else {
-                    editModes.push(id);
-                }
-                return {
-                    modes: {
-                        reply: prevState.modes.reply,
-                        edit: editModes
-                    }
-                }
-            })
-        }
-        if(type === states.REPLY) {
-            this.setState(prevState => { 
-                let replyModes =  [...prevState.modes.reply];
-                if(this.state.modes.reply.includes(id)) {
-                    replyModes = replyModes.filter((modeId) => modeId !== id);
-                } else {
-                    replyModes =  replyModes.concat(id);
-                }
-                return {
-                    modes: {
-                        reply: replyModes,
-                        edit: prevState.modes.edit
-                    }
-                }
-            });
-        }
+    confirmDelete(id) {
+        this.setState({deleteModal: {show: true, id: id}});
     }
     
     deleteComment(id) {
@@ -114,6 +89,25 @@ class App extends React.Component {
         return true;
     }
 
+    updateMode(id, type) {
+        this.setState(prevState => {
+            let editModes = [...prevState.modes.edit];  
+            let replyModes =  [...prevState.modes.reply];
+            if(type === states.EDIT) {
+                editModes = toggleMode(editModes, id);
+            }
+            if(type === states.REPLY) {
+                replyModes = toggleMode(replyModes, id);
+            }
+            return {
+                modes: {
+                    reply: replyModes,
+                    edit: editModes
+                }
+            }
+        });
+    }
+
     addComment(user, content) {
         const comment = initComment(content, user);
         this.setState(prevState => {
@@ -125,9 +119,15 @@ class App extends React.Component {
         });
     }
 
+
+    //does this work?
+    get modalStyle() {
+        return this.state.deleteModal.show && 'no-overflow';
+    }
+
     render() {
         return (
-            <div>
+            <div className={`root ${this.modalStyle}`}>
                 <main className="container">
                     <CommentThread 
                         currentUser={this.state.currentUser} 
@@ -146,6 +146,8 @@ class App extends React.Component {
                     <Attribution />
                     <button onClick={() => {this.editComment()}}></button>
                 </footer>
+
+                {this.state.deleteModal.show && <ConfirmDeletePopup></ConfirmDeletePopup>}
             </div>
         );
     }

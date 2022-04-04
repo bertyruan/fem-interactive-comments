@@ -34,6 +34,15 @@ body {
   background-color: var(--bg-color);
 }
 
+.root {
+  position: relative;
+}
+
+.no-overflow {
+  overflow: hidden;
+  height: 100vh;
+}
+
 /* HELPER CLASSES */
 
 .comment-text {

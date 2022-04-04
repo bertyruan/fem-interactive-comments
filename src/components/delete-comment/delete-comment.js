@@ -1,7 +1,7 @@
-import { PopupModal } from './../popup-modal/popup-modal';
-import { Button } from '../../buttons/buttons';
+import { PopupModal } from '../shared/popup-modal/popup-modal';
+import { Button } from '../buttons/buttons';
 
-function ConfirmDelete() {
+function ConfirmDelete(props) {
     return (
         <div className="stack container-delete">
             <h2>Delete comment</h2>
@@ -14,7 +14,7 @@ function ConfirmDelete() {
     );
 }
 
-function ConfirmDeletePopup() {
+function ConfirmDeletePopup(props) {
     return (
         <PopupModal>
             <ConfirmDelete></ConfirmDelete>

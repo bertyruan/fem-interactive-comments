@@ -208,4 +208,13 @@ function orderReplyComment(_comments) {
     return comments;
 }
 
-export {initComment, buildNewThread, getParentComment, getUserFriendlyDate, threadData, rootId, states }
+function toggleMode(modes, id) {
+    if(modes.includes(id)) {
+        modes = modes.filter(modeId => modeId !== id);
+    } else {
+        modes.push(id);
+    }
+    return modes;
+}
+
+export {initComment, buildNewThread, getParentComment, getUserFriendlyDate, toggleMode, threadData, rootId, states }
