@@ -40,8 +40,9 @@ body {
 }
 
 .no-overflow {
-  overflow: hidden;
+  overflow-y: hidden;
   height: 100vh;
+  padding-right: 15px;
 }
 
 /* HELPER CLASSES */

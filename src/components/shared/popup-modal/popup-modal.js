@@ -2,9 +2,13 @@ import './popup-modal.css';
 
 function PopupModal(props) {
     return (
-        <section className="l-popup">
-            {props.children}
-        </section>
+
+        <div className="l-popup">
+            <div className="overlay">
+                {props.children}
+            </div>    
+        </div>
+  
     );
 }
 

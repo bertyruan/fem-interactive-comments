@@ -35,6 +35,12 @@ class App extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.deleteModal.show !== this.state.deleteModal.show) {
+            document.body.classList.toggle('no-overflow');
+        }
+    }
+
     promptDelete(id) {
         this.setState({deleteModal: {show: true, id: id}});
     }
@@ -129,9 +135,20 @@ class App extends React.Component {
         return this.state.deleteModal.show && 'no-overflow';
     }
 
+    get modal() {
+        const modal = (
+            <ConfirmDeletePopup
+                    show={this.state.deleteModal.show}
+                    cancel={this.cancelDelete.bind(this)}
+                    delete={this.deleteComment.bind(this)}
+                />
+        );
+       return ReactDOM.createPortal(modal, document.getElementById('modal'));
+    }
+
     render() {
         return (
-            <div className={`root ${this.modalStyle}`}>
+            <div className='root'>
                 <main className="container">
                     <CommentThread 
                         currentUser={this.state.currentUser} 
@@ -150,11 +167,7 @@ class App extends React.Component {
                     <Attribution />
                     <button onClick={() => {this.editComment()}}></button>
                 </footer>
-                <ConfirmDeletePopup
-                    show={this.state.deleteModal.show}
-                    cancel={this.cancelDelete.bind(this)}
-                    delete={this.deleteComment.bind(this)}
-                />
+                { this.modal }
             </div>
         );
     }
